@@ -2,99 +2,99 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/categories/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/categories/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://Soflari.github.io/hugo-dev/en/categories/"
+                href="https://soflari.github.io/hugo_dev/en/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://Soflari.github.io/hugo-dev/categories/"
+                href="https://soflari.github.io/hugo_dev/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="https://Soflari.github.io/hugo-dev/ar/categories/"
+                href="https://soflari.github.io/hugo_dev/ar/categories/"
                 />
   </url><url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/post/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/post/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://Soflari.github.io/hugo-dev/post/"
+                href="https://soflari.github.io/hugo_dev/post/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="https://Soflari.github.io/hugo-dev/ar/post/"
+                href="https://soflari.github.io/hugo_dev/ar/post/"
                 />
   </url><url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/tags/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/tags/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://Soflari.github.io/hugo-dev/en/tags/"
+                href="https://soflari.github.io/hugo_dev/en/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://Soflari.github.io/hugo-dev/tags/"
+                href="https://soflari.github.io/hugo_dev/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="https://Soflari.github.io/hugo-dev/ar/tags/"
+                href="https://soflari.github.io/hugo_dev/ar/tags/"
                 />
   </url><url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/categories/%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/categories/%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/categories/%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9-%D9%85%D8%B9-%D9%81%D8%B1%D8%A7%D8%BA%D8%A7%D8%AA/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/categories/%D8%AA%D8%AC%D8%B1%D8%A8%D8%A9-%D9%85%D8%B9-%D9%81%D8%B1%D8%A7%D8%BA%D8%A7%D8%AA/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/tags/%D9%85%D8%A7%D8%B1%D9%83%D8%AF%D8%A7%D9%88%D9%86/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/tags/%D9%85%D8%A7%D8%B1%D9%83%D8%AF%D8%A7%D9%88%D9%86/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/p/%D9%85%D8%AB%D8%A7%D9%84-%D9%86%D8%B5/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/p/%D9%85%D8%AB%D8%A7%D9%84-%D9%86%D8%B5/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://Soflari.github.io/hugo-dev/p/placeholder-text/"
+                href="https://soflari.github.io/hugo_dev/p/placeholder-text/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="https://Soflari.github.io/hugo-dev/ar/p/%D9%85%D8%AB%D8%A7%D9%84-%D9%86%D8%B5/"
+                href="https://soflari.github.io/hugo_dev/ar/p/%D9%85%D8%AB%D8%A7%D9%84-%D9%86%D8%B5/"
                 />
   </url><url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://Soflari.github.io/hugo-dev/en/"
+                href="https://soflari.github.io/hugo_dev/en/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://Soflari.github.io/hugo-dev/"
+                href="https://soflari.github.io/hugo_dev/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ar"
-                href="https://Soflari.github.io/hugo-dev/ar/"
+                href="https://soflari.github.io/hugo_dev/ar/"
                 />
   </url><url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/tags/%D9%86%D8%B5/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/tags/%D9%86%D8%B5/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://Soflari.github.io/hugo-dev/ar/tags/%D9%88%D8%B3%D9%85-%D9%85%D8%B9-%D9%81%D8%B1%D8%A7%D8%BA%D8%A7%D8%AA/</loc>
+    <loc>https://soflari.github.io/hugo_dev/ar/tags/%D9%88%D8%B3%D9%85-%D9%85%D8%B9-%D9%81%D8%B1%D8%A7%D8%BA%D8%A7%D8%AA/</loc>
     <lastmod>2019-03-09T00:00:00+00:00</lastmod>
   </url>
 </urlset>

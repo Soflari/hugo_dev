@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Example Site</title>
-        <link>https://Soflari.github.io/hugo-dev/en/</link>
+        <link>https://soflari.github.io/hugo_dev/en/</link>
         <description>Recent content on Example Site</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
-        <copyright>Soflari</copyright><atom:link href="https://Soflari.github.io/hugo-dev/en/index.xml" rel="self" type="application/rss+xml" />
+        <copyright>Soflari</copyright><atom:link href="https://soflari.github.io/hugo_dev/en/index.xml" rel="self" type="application/rss+xml" />
     </channel>
 </rss>
