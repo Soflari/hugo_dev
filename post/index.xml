@@ -13,8 +13,7 @@
         <pubDate>Fri, 13 Jun 2025 16:56:05 +0800</pubDate>
         
         <guid>https://soflari.github.io/hugo_dev/p/esl%E7%AC%AC%E4%BA%94%E7%AB%A0%E5%9F%BA%E5%B1%95%E5%BC%80%E5%92%8C%E6%AD%A3%E5%88%99%E5%8C%96/</guid>
-        <description>
-&lt;h1 id=&#34;引言&#34;&gt;引言
+        <description>&lt;h1 id=&#34;引言&#34;&gt;引言
 &lt;/h1&gt;&lt;p&gt;超越线性模型的一种方式，就是通过增强输入 $X$ 。为 $X$ 赋予非线性，利用 $h_{m}(X)$ 张成的线性空间来讨论非线性问题，我的评价是：用非线性的砖垒一个线性的房子，来模仿非线性。（以曲代直）&lt;br&gt;
 “分段多项式”和“样条”用于局部多项式表示；“小波”基，用于建模信号和图像。
 各式各样的基滥用会过拟合，控制复杂度的方式有三种：&lt;/p&gt;
