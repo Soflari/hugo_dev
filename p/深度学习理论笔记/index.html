@@ -363,9 +363,7 @@
 $$
 L\left( w \right) =\sum_{i=1}^n{\exp \left( -y_{}^{\left( i \right)}w_{}^{T}x_{}^{\left( i \right)} \right)}
 $$
-即，$L(w_t) \longrightarrow 0$。梯度下降法的迭代过程最终会收敛至$l_2$最大间隔向量的方向，即$
-\underset{t\rightarrow 0}{\lim}\frac{w_{t}^{}}{||w_t||<em>2}=\frac{\hat{w}}{||\hat{w}||}
-$,此处的$\hat{w}$<br>
+即，$L(w_t) \longrightarrow 0$。梯度下降法的迭代过程最终会收敛至$l_2$最大间隔向量的方向，即$\underset{t\rightarrow 0}{\lim}\frac{w_{t}^{}}{||w_t||<em>2}=\frac{\hat{w}}{||\hat{w}||}$，此处的 $\hat{w}$<br>
 $$
 \hat{w}=\underset{w}{\text{arg}\min}||w||</em>{}^{2}\ \text{s.t.\ }\forall i,\ w_{}^{T}x_{}^{\left( i \right)}y_{}^{\left( i \right)}\ge 1
 $$
