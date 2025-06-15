@@ -25,8 +25,10 @@
 &lt;/ol&gt;
 &lt;h1 id=&#34;分段多项式与样条&#34;&gt;分段多项式与样条
 &lt;/h1&gt;&lt;p&gt;分段常数是1阶样条，连续分段线性函数是2阶样条。以下是阶段幂基函数的广义形式：&lt;br&gt;
-$$h_{j}^{}\left( X \right) =X_{}^{j-1},\ j=1,&amp;hellip;,M, \
-h_{M+l}\left( X \right) =\left( X-\xi _l \right) &lt;em&gt;{+}^{M-1},\ l=1,&amp;hellip;,K.$$&lt;br&gt;
+$$
+h_{j}^{}\left( X \right) =X_{}^{j-1},\ j=1,&amp;hellip;,M, \
+h_{M+l}\left( X \right) =\left( X-\xi _l \right) &lt;em&gt;{+}^{M-1},\ l=1,&amp;hellip;,K.
+$$&lt;br&gt;
 上式中的$h_j(X)$是起始点的各阶基函数，$h&lt;/em&gt;{M+l}(X)$是分段后的基函数。&lt;br&gt;
 于是原函数可以被这些基函数线性表示，基的数量计算：&lt;br&gt;
 基函数个数 = (区域数) * (每区域参数个数) - (分段点个数) * (每个分段点的约束数量)，即：&lt;br&gt;
