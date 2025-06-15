@@ -66,16 +66,16 @@ $$
         
         <guid>https://soflari.github.io/hugo_dev/p/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA%E7%AC%94%E8%AE%B0/</guid>
         <description>&lt;p&gt;梯度下降对于线性可分数据和线性不可分数据的隐性偏置描述是不同的&lt;/p&gt;
-&lt;h3 id=&#34;定理931&#34;&gt;定理9.3.1
-&lt;/h3&gt;&lt;p&gt;对于几乎所有的线性可分数据集，采用梯度下降法进行更新，其中初始化权重$w_0$和步长的选择都旨在最小化指数损失：
+&lt;h3 id=&#34;定理-931&#34;&gt;定理 9.3.1
+&lt;/h3&gt;&lt;p&gt;对于几乎所有的线性可分数据集，采用梯度下降法进行更新，其中初始化权重 $w_0$ 和步长的选择都旨在最小化指数损失：
 $$
-L\left( w \right) =\sum_{i=1}^n{\exp \left( -y_{}^{\left( i \right)}w_{}^{T}x_{}^{\left( i \right)} \right)}
+L(w) = \sum_{i=1}^{n} \exp\left(-y^{(i)} w^T x^{(i)}\right)
 $$
-即，$L(w_t) \longrightarrow 0$。梯度下降法的迭代过程最终会收敛至$l_2$最大间隔向量的方向，即$\underset{t\rightarrow 0}{\lim}\frac{w_{t}^{}}{||w_t||&lt;em&gt;2}=\frac{\hat{w}}{||\hat{w}||}$，此处的 $\hat{w}$&lt;br&gt;
+即，$L(w_t) \to 0$。梯度下降法的迭代过程最终会收敛至 $l_2$ 最大间隔向量的方向，即 $\lim_{t \to \infty} \frac{w_t}{||w_t||_2} = \frac{\hat{w}}{||\hat{w}||_2}$，此处的 $\hat{w}$ 为：
 $$
-\hat{w}=\underset{w}{\text{arg}\min}||w||&lt;/em&gt;{}^{2}\ \text{s.t.\ }\forall i,\ w_{}^{T}x_{}^{\left( i \right)}y_{}^{\left( i \right)}\ge 1
+\hat{w} = \underset{w}{\arg\min} , ||w||_2^2 \quad \text{s.t.} \quad \forall i, , y^{(i)} w^T x^{(i)} \ge 1
 $$
-不失一般性，假设$\forall i, y^{(i)} = 1$作为线性模型的符号，因为该符号可以被合并到$x^{(i)}$中。&lt;/p&gt;
+不失一般性，假设 $\forall i, y^{(i)} = 1$ 作为线性模型的符号，因为该符号可以被合并到 $x^{(i)}$ 中。&lt;/p&gt;
 </description>
         </item>
         <item>
