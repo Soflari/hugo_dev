@@ -565,7 +565,10 @@ $$Y_{t_1 j} = A_{t_1 t_2} (X_{t_2 k} W^V_{jk})$$</li>
 </li>
 <li>
 <p><strong>计算局部梯度（$\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S_{t_1 t_2}}$）：</strong></p>
-<p>我们需要再次使用链式法则：$\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S_{t_1 t_2}} = \sum_{t_2&rsquo;&rsquo;} \frac{\partial A_{t_1 t_2&rsquo;}}{\partial S&rsquo;<em>{t_1 t_2&rsquo;&rsquo;}} \frac{\partial S&rsquo;</em>{t_1 t_2&rsquo;&rsquo;}}{\partial S_{t_1 t_2}}$</p>
+<p>我们需要再次使用链式法则：
+$$
+\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S_{t_1 t_2}} = \sum_{t_2&rsquo;&rsquo;} \frac{\partial A_{t_1 t_2&rsquo;}}{\partial S&rsquo;<em>{t_1 t_2&rsquo;&rsquo;}}\frac{\partial S&rsquo;</em>{t_1 t_2&rsquo;&rsquo;}}{\partial S_{t_1 t_2}}
+$$</p>
 <ol>
 <li>
 <p><strong>缩放梯度：</strong> $\frac{\partial S&rsquo;<em>{t_1 t_2&rsquo;&rsquo;}}{\partial S</em>{t_1 t_2}} = \frac{\partial (S_{t_1 t_2&rsquo;&rsquo;} / \sqrt{d_{out}})}{\partial S_{t_1 t_2}} = \frac{1}{\sqrt{d_{out}}} \delta_{t_2&rsquo;&rsquo; t_2}$</p>
