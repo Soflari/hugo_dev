@@ -308,6 +308,7 @@
         </li>
       </ol>
     </li>
+    <li><a href="#代码验证">代码验证</a></li>
   </ol>
 </nav>
         </div>
@@ -724,7 +725,8 @@ $$\frac{\partial L}{\partial S_{t_1 t_2}} = \frac{A_{t_1 t_2}}{\sqrt{d_{out}}} \
 </blockquote>
 <p>而 $\frac{\partial L}{\partial A_{t_1 t_2}}$ (即 $G^A$) 定义为：</p>
 $$\frac{\partial L}{\partial A_{t_1 t_2}} = \frac{\partial L}{\partial Y_{t_1 j}} V_{t_2 j}$$
-<div class="highlight"><div class="chroma">
+<h2 id="代码验证">代码验证
+</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
@@ -855,11 +857,9 @@ $$\frac{\partial L}{\partial A_{t_1 t_2}} = \frac{\partial L}{\partial Y_{t_1 j}
 </span><span class="lnt">127
 </span><span class="lnt">128
 </span><span class="lnt">129
-</span><span class="lnt">130
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">torch</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">torch</span>
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">torch.testing</span> <span class="c1"># 导入测试库</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># ---------------------------------------------------------------------------</span>
