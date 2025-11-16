@@ -300,9 +300,9 @@
       <ol>
         <li><a href="#引言和符号定义">引言和符号定义</a>
           <ol>
-            <li><a href="#第-1-部分wv-value-的梯度推导">第 1 部分：$W^V$ (Value) 的梯度推导</a></li>
-            <li><a href="#wv-梯度总结">$W^V$ 梯度总结</a></li>
-            <li><a href="#第-2-部分wq-query-和-wk-key-的梯度推导">第 2 部分：$W^Q$ (Query) 和 $W^K$ (Key) 的梯度推导</a></li>
+            <li><a href="#第-1-部分wv-value-的梯度推导">第 1 部分： (Value) 的梯度推导</a></li>
+            <li><a href="#wv-梯度总结"> 梯度总结</a></li>
+            <li><a href="#第-2-部分wq-query-和-wk-key-的梯度推导">第 2 部分： (Query) 和  (Key) 的梯度推导</a></li>
             <li><a href="#最终梯度总结">最终梯度总结</a></li>
           </ol>
         </li>
@@ -407,8 +407,8 @@
 </h2><p><strong>索引和张量定义</strong></p>
 <ul>
 <li>$t_1, t_2$: Token/序列 (Sequence) 索引。$t_1$ 代表查询 (Query)，$t_2$ 代表键/值 (Key/Value)。</li>
-<li>$i, k$: 输入特征维度 ($d_in$) 的索引。</li>
-<li>$j$: 输出/内部特征维度 ($d_out$) 的索引。
+<li>$i, k$: 输入特征维度 ($d\_in$) 的索引。</li>
+<li>$j$: 输出/内部特征维度 ($d\_out$) 的索引。
 <strong>输入张量：</strong></li>
 <li><strong>Input $X$:</strong> $X_{ti}$ (对应代码中的 <code>x</code>)</li>
 <li><strong>Query Weights $W_Q$:</strong> $W^Q_{ji}$ (对应 <code>self.W_q.weight</code>)</li>
@@ -424,17 +424,17 @@
 <li><strong>Query:</strong> $Q_{t_1 j} = X_{t_1 i} W^Q_{ji}$</li>
 <li><strong>Key:</strong> $K_{t_2 j} = X_{t_2 k} W^K_{jk}$</li>
 <li><strong>Value:</strong> $V_{t_2 j} = X_{t_2 k} W^V_{jk}$
-（在爱因斯坦约定中，重复的索引 $i$ 和 $k$ 表示在 $d_in$ 维度上求和。）</li>
+（在爱因斯坦约定中，重复的索引 $i$ 和 $k$ 表示在 $d\_in$ 维度上求和。）</li>
 </ul>
 </li>
 <li><strong><code>attn_scores</code> 的计算 (线性)</strong>
-<code>attn_scores = torch.matmul(q, k.T)</code>。这是一个矩阵乘法，它在 $j$ (即 $d_out$) 维度上进行缩并。
+<code>attn_scores = torch.matmul(q, k.T)</code>。这是一个矩阵乘法，它在 $j$ (即 $d\_out$) 维度上进行缩并。
 $$S_{t_1 t_2} = Q_{t_1 j} K_{t_2 j}$$</li>
 <li><strong><code>attn_weights</code> 的计算 (非线性)</strong>
 <code>attn_weights = torch.softmax(...)</code>。这一步是<strong>非线性的</strong>，不能用简单的张量缩并表示。我们将其定义为函数 $A = \text{softmax}(S^{\prime})$：
-$$S&rsquo;<em>{t_1 t_2} = S</em>{t_1 t_2} / \sqrt{d_{out}}$$
-$$A_{t_1 t_2} = \frac{\exp(S^{\prime}<em>{t_1 t_2})}{\mathbf{1}</em>{t_2^{\prime}} \exp(S^{\prime}<em>{t_1 t_2^{\prime}})}$$
-$A</em>{t_1 t_2}$ 是最终的注意力权重矩阵。</li>
+$$S'_{t_1 t_2} = S_{t_1 t_2} / \sqrt{d_{out}}$$
+$$A_{t_1 t_2} = \frac{\exp(S^{\prime}_{t_1 t_2})}{\mathbf{1}_{t_2^{\prime}} \exp(S^{\prime}_{t_1 t_2^{\prime}})}$$
+$A_{t_1 t_2}$ 是最终的注意力权重矩阵。</li>
 <li><strong><code>context_vecs</code> 的计算 (线性)</strong>
 <code>context_vecs = torch.matmul(attn_weights, v)</code>。这是注意力权重 $A$ 和值 $V$ 之间的矩阵乘法。它在 $t_2$ 维度（序列）上进行缩并：
 $$Y_{t_1 j} = A_{t_1 t_2} V_{t_2 j}$$</li>
@@ -459,7 +459,7 @@ $$Y_{t_1 j} = A_{t_1 t_2} (X_{t_2 k} W^V_{jk})$$</li>
 </h3><p>我们将遵循您的爱因斯坦求和约定（重复的索引表示在该维度上求和）。</p>
 <p>已知（上游梯度）：</p>
 <p>我们假设我们已经拥有了损失 $L$ 相对于注意力层最终输出 $Y$ 的梯度。我们将其定义为 $G^Y$：</p>
-<p>$$G^Y_{t_1 j} = \frac{\partial L}{\partial Y_{t_1 j}}$$</p>
+$$G^Y_{t_1 j} = \frac{\partial L}{\partial Y_{t_1 j}}$$
 <p>目标：</p>
 <p>我们希望求解以下三个梯度：</p>
 <ol>
@@ -486,14 +486,14 @@ $$Y_{t_1 j} = A_{t_1 t_2} (X_{t_2 k} W^V_{jk})$$</li>
 </li>
 <li>
 <p>应用链式法则： 我们对一个特定的 $V_{t_2 j}$ 求导：</p>
-<p>$$G^V_{t_2 j} = \frac{\partial L}{\partial V_{t_2 j}} = \sum_{t_1&rsquo;} \sum_{j&rsquo;} \frac{\partial L}{\partial Y_{t_1&rsquo; j&rsquo;}} \frac{\partial Y_{t_1&rsquo; j&rsquo;}}{\partial V_{t_2 j}}$$</p>
+$$G^V_{t_2 j} = \frac{\partial L}{\partial V_{t_2 j}} = \sum_{t_1'} \sum_{j'} \frac{\partial L}{\partial Y_{t_1' j'}} \frac{\partial Y_{t_1' j'}}{\partial V_{t_2 j}}$$
 </li>
 <li>
-<p>计算局部梯度： $\frac{\partial Y_{t_1&rsquo; j&rsquo;}}{\partial V_{t_2 j}} = \frac{\partial (A_{t_1&rsquo; t_2&rsquo;} V_{t_2&rsquo; j&rsquo;})}{\partial V_{t_2 j}} = A_{t_1&rsquo; t_2} \delta_{j&rsquo; j}$</p>
+<p>计算局部梯度： $\frac{\partial Y_{t_1' j'}}{\partial V_{t_2 j}} = \frac{\partial (A_{t_1' t_2'} V_{t_2' j'})}{\partial V_{t_2 j}} = A_{t_1' t_2} \delta_{j' j}$</p>
 </li>
 <li>
 <p>代回（并使用爱因斯坦约定）：</p>
-<p>$$G^V_{t_2 j} = G^Y_{t_1 j} A_{t_1 t_2}$$</p>
+$$G^V_{t_2 j} = G^Y_{t_1 j} A_{t_1 t_2}$$
 </li>
 </ul>
 <p><strong>步骤 1.2：计算 $\frac{\partial L}{\partial W^V}$</strong></p>
@@ -503,22 +503,22 @@ $$Y_{t_1 j} = A_{t_1 t_2} (X_{t_2 k} W^V_{jk})$$</li>
 </li>
 <li>
 <p>应用链式法则：</p>
-<p>$$\frac{\partial L}{\partial W^V_{jk}} = \sum_{t_2&rsquo;} \sum_{j&rsquo;} \frac{\partial L}{\partial V_{t_2&rsquo; j&rsquo;}} \frac{\partial V_{t_2&rsquo; j&rsquo;}}{\partial W^V_{jk}}$$</p>
+$$\frac{\partial L}{\partial W^V_{jk}} = \sum_{t_2'} \sum_{j'} \frac{\partial L}{\partial V_{t_2' j'}} \frac{\partial V_{t_2' j'}}{\partial W^V_{jk}}$$
 </li>
 <li>
-<p><strong>计算局部梯度：</strong> $\frac{\partial V_{t_2&rsquo; j&rsquo;}}{\partial W^V_{jk}} = \frac{\partial (X_{t_2&rsquo; k&rsquo;} W^V_{j&rsquo; k&rsquo;})}{\partial W^V_{jk}} = X_{t_2&rsquo; k} \delta_{j&rsquo; j}$</p>
+<p><strong>计算局部梯度：</strong> $\frac{\partial V_{t_2' j'}}{\partial W^V_{jk}} = \frac{\partial (X_{t_2' k'} W^V_{j' k'})}{\partial W^V_{jk}} = X_{t_2' k} \delta_{j' j}$</p>
 </li>
 <li>
 <p>代回（并使用爱因斯坦约定）：</p>
-<p>$$\frac{\partial L}{\partial W^V_{jk}} = G^V_{t_2 j} X_{t_2 k}$$</p>
+$$\frac{\partial L}{\partial W^V_{jk}} = G^V_{t_2 j} X_{t_2 k}$$
 </li>
 </ul>
 <h4 id="wv-梯度总结">$W^V$ 梯度总结
 </h4><p>将步骤 1.1 代入 1.2，得到 $W^V$ 的最终梯度：</p>
-<p>$$\frac{\partial L}{\partial W^V_{jk}} = (G^Y_{t_1 j} A_{t_1 t_2}) X_{t_2 k}$$</p>
+$$\frac{\partial L}{\partial W^V_{jk}} = (G^Y_{t_1 j} A_{t_1 t_2}) X_{t_2 k}$$
 <hr>
 <h4 id="第-2-部分wq-query-和-wk-key-的梯度推导">第 2 部分：$W^Q$ (Query) 和 $W^K$ (Key) 的梯度推导
-</h4><p>此路径是 $L \rightarrow Y \rightarrow A \rightarrow S&rsquo; \rightarrow S \rightarrow {Q, K} \rightarrow {W^Q, W^K}$。</p>
+</h4><p>此路径是 $L \rightarrow Y \rightarrow A \rightarrow S' \rightarrow S \rightarrow \{Q, K\} \rightarrow \{W^Q, W^K\}$。</p>
 <p><strong>步骤 2.1：计算 $\frac{\partial L}{\partial A}$ (即 $G^A$)</strong></p>
 <ul>
 <li>
@@ -526,96 +526,97 @@ $$Y_{t_1 j} = A_{t_1 t_2} (X_{t_2 k} W^V_{jk})$$</li>
 </li>
 <li>
 <p>应用链式法则：</p>
-<p>$$G^A_{t_1 t_2} = \frac{\partial L}{\partial A_{t_1 t_2}} = \sum_{t_1&rsquo;} \sum_{j&rsquo;} \frac{\partial L}{\partial Y_{t_1&rsquo; j&rsquo;}} \frac{\partial Y_{t_1&rsquo; j&rsquo;}}{\partial A_{t_1 t_2}}$$</p>
+$$G^A_{t_1 t_2} = \frac{\partial L}{\partial A_{t_1 t_2}} = \sum_{t_1'} \sum_{j'} \frac{\partial L}{\partial Y_{t_1' j'}} \frac{\partial Y_{t_1' j'}}{\partial A_{t_1 t_2}}$$
 </li>
 <li>
-<p><strong>计算局部梯度：</strong> $\frac{\partial Y_{t_1&rsquo; j&rsquo;}}{\partial A_{t_1 t_2}} = \frac{\partial (A_{t_1&rsquo; t_2&rsquo;} V_{t_2&rsquo; j&rsquo;})}{\partial A_{t_1 t_2}} = \delta_{t_1&rsquo; t_1} V_{t_2 j&rsquo;}$</p>
+<p><strong>计算局部梯度：</strong> $\frac{\partial Y_{t_1' j'}}{\partial A_{t_1 t_2}} = \frac{\partial (A_{t_1' t_2'} V_{t_2' j'})}{\partial A_{t_1 t_2}} = \delta_{t_1' t_1} V_{t_2 j'}$</p>
 </li>
 <li>
 <p>代回（并使用爱因斯坦约定）：</p>
-<p>$$G^A_{t_1 t_2} = G^Y_{t_1 j} V_{t_2 j}$$</p>
+$$G^A_{t_1 t_2} = G^Y_{t_1 j} V_{t_2 j}$$
 <p>（这是我们上一个回答的结论，现在它将作为 $G^S$ 推导的起点。）</p>
 </li>
 </ul>
 <p><strong>步骤 2.2：计算 $\frac{\partial L}{\partial S}$ (即 $G^S$)</strong></p>
-<p>这是最关键的步骤：$L \rightarrow A \rightarrow S&rsquo; \rightarrow S$。</p>
+<p>这是最关键的步骤：$L \rightarrow A \rightarrow S' \rightarrow S$。</p>
 <ul>
 <li>
 <p><strong>前向方程：</strong></p>
 <ol>
 <li>
-<p>$S&rsquo;<em>{t_1 t_2} = S</em>{t_1 t_2} / \sqrt{d_{out}}$</p>
+<p>$S'_{t_1 t_2} = S_{t_1 t_2} / \sqrt{d_{out}}$</p>
 </li>
 <li>
-<p>$A_{t_1 t_2} = \frac{\exp(S&rsquo;<em>{t_1 t_2})}{\sum</em>{t_2&rsquo;&rsquo;} \exp(S&rsquo;_{t_1 t_2&rsquo;&rsquo;})}$ (Softmax)</p>
+<p>$A_{t_1 t_2} = \frac{\exp(S'_{t_1 t_2})}{\sum_{t_2''} \exp(S'_{t_1 t_2''})}$ (Softmax)</p>
 </li>
 </ol>
 </li>
 <li>
 <p>应用链式法则：</p>
-<p>我们想求$\frac{\partial L}{\partial S_{t_1 t_2}}$(一个特定的$S$元素)。$S_{t_1 t_2}$通过$S_{t_1 t_2}&rsquo;$影响第$t_1$行的所有$A$元素（即$A_{t_1 t_2&rsquo;}$，其中$t_2&rsquo;$是该行的任一列）。</p>
-<p>$$G^S_{t_1 t_2} = \frac{\partial L}{\partial S_{t_1 t_2}} = \sum_{t_2&rsquo;} \frac{\partial L}{\partial A_{t_1 t_2&rsquo;}} \frac{\partial A_{t_1 t_2&rsquo;}}{\partial S_{t_1 t_2}}$$</p>
-<p>(注意：Softmax 是逐行应用的，所以 $S_{t_1 t_2}$ 只影响 $A_{t_1 :}$，这就是为什么求和中没有 $t_1&rsquo;$。)</p>
+<p>我们想求$\frac{\partial L}{\partial S_{t_1 t_2}}$(一个特定的$S$元素)。$S_{t_1 t_2}$通过$S_{t_1 t_2}'$影响第$t_1$行的所有$A$元素（即$A_{t_1 t_2'}$，其中$t_2'$是该行的任一列）。</p>
+$$G^S_{t_1 t_2} = \frac{\partial L}{\partial S_{t_1 t_2}} = \sum_{t_2'} \frac{\partial L}{\partial A_{t_1 t_2'}} \frac{\partial A_{t_1 t_2'}}{\partial S_{t_1 t_2}}$$
+<p>(注意：Softmax 是逐行应用的，所以 $S_{t_1 t_2}$ 只影响 $A_{t_1 :}$，这就是为什么求和中没有 $t_1'$。)</p>
 </li>
 <li>
-<p><strong>计算局部梯度（$\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S_{t_1 t_2}}$）：</strong></p>
+<p><strong>计算局部梯度（$\frac{\partial A_{t_1 t_2'}}{\partial S_{t_1 t_2}}$）：</strong></p>
 <p>我们需要再次使用链式法则：
+</p>
 $$
-\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S_{t_1 t_2}} = \sum_{t_2&rsquo;&rsquo;} \frac{\partial A_{t_1 t_2&rsquo;}}{\partial S&rsquo;<em>{t_1 t_2&rsquo;&rsquo;}}\frac{\partial S&rsquo;</em>{t_1 t_2&rsquo;&rsquo;}}{\partial S_{t_1 t_2}}
-$$</p>
+    \frac{\partial A_{t_1 t_2'}}{\partial S_{t_1 t_2}} = \sum_{t_2''} \frac{\partial A_{t_1 t_2'}}{\partial S'_{t_1 t_2''}}\frac{\partial S'_{t_1 t_2''}}{\partial S_{t_1 t_2}}
+    $$
 <ol>
 <li>
-<p><strong>缩放梯度：</strong> $\frac{\partial S&rsquo;<em>{t_1 t_2&rsquo;&rsquo;}}{\partial S</em>{t_1 t_2}} = \frac{\partial (S_{t_1 t_2&rsquo;&rsquo;} / \sqrt{d_{out}})}{\partial S_{t_1 t_2}} = \frac{1}{\sqrt{d_{out}}} \delta_{t_2&rsquo;&rsquo; t_2}$</p>
+<p><strong>缩放梯度：</strong> $\frac{\partial S'_{t_1 t_2''}}{\partial S_{t_1 t_2}} = \frac{\partial (S_{t_1 t_2''} / \sqrt{d_{out}})}{\partial S_{t_1 t_2}} = \frac{1}{\sqrt{d_{out}}} \delta_{t_2'' t_2}$</p>
 </li>
 <li>
-<p><strong>Softmax 雅可比矩阵：</strong> $\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S&rsquo;_{t_1 t_2&rsquo;&rsquo;}}$</p>
+<p><strong>Softmax 雅可比矩阵：</strong> $\frac{\partial A_{t_1 t_2'}}{\partial S'_{t_1 t_2''}}$</p>
 <ul>
 <li>
-<p>Case 1: $t_2&rsquo; = t_2&rsquo;&rsquo;$ (对角线元素)</p>
-<p>$\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S&rsquo;<em>{t_1 t_2&rsquo;}} = A</em>{t_1 t_2&rsquo;} (1 - A_{t_1 t_2&rsquo;})$</p>
+<p>Case 1: $t_2' = t_2''$ (对角线元素)</p>
+<p>$\frac{\partial A_{t_1 t_2'}}{\partial S'_{t_1 t_2'}} = A_{t_1 t_2'} (1 - A_{t_1 t_2'})$</p>
 </li>
 <li>
-<p>Case 2: $t_2&rsquo; \neq t_2&rsquo;&rsquo;$ (非对角线元素)</p>
-<p>$\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S&rsquo;<em>{t_1 t_2&rsquo;&rsquo;}} = -A</em>{t_1 t_2&rsquo;} A_{t_1 t_2&rsquo;&rsquo;}$</p>
+<p>Case 2: $t_2' \neq t_2''$ (非对角线元素)</p>
+<p>$\frac{\partial A_{t_1 t_2'}}{\partial S'_{t_1 t_2''}} = -A_{t_1 t_2'} A_{t_1 t_2''}$</p>
 </li>
 <li>
-<p><strong>组合 (Kronecker Delta):</strong> $\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S&rsquo;<em>{t_1 t_2&rsquo;&rsquo;}} = A</em>{t_1 t_2&rsquo;} (\delta_{t_2&rsquo; t_2&rsquo;&rsquo;} - A_{t_1 t_2&rsquo;&rsquo;})$</p>
+<p><strong>组合 (Kronecker Delta):</strong> $\frac{\partial A_{t_1 t_2'}}{\partial S'_{t_1 t_2''}} = A_{t_1 t_2'} (\delta_{t_2' t_2''} - A_{t_1 t_2''})$</p>
 </li>
 </ul>
 </li>
 <li>
 <p>代回 (1) 和 (2) 到局部梯度：</p>
-<p>$$\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S_{t_1 t_2}} = \sum_{t_2&rsquo;&rsquo;} \left[ A_{t_1 t_2&rsquo;} (\delta_{t_2&rsquo; t_2&rsquo;&rsquo;} - A_{t_1 t_2&rsquo;&rsquo;}) \right] \left[ \frac{1}{\sqrt{d_{out}}} \delta_{t_2&rsquo;&rsquo; t_2} \right]$$</p>
-<p>由于 $\delta_{t_2&rsquo;&rsquo; t_2}$， $t_2&rsquo;&rsquo;$ 上的求和坍缩，我们只需令 $t_2&rsquo;&rsquo; = t_2$:</p>
-<p>$$\frac{\partial A_{t_1 t_2&rsquo;}}{\partial S_{t_1 t_2}} = \frac{1}{\sqrt{d_{out}}} A_{t_1 t_2&rsquo;} (\delta_{t_2&rsquo; t_2} - A_{t_1 t_2})$$</p>
+$$\frac{\partial A_{t_1 t_2'}}{\partial S_{t_1 t_2}} = \sum_{t_2''} \left[ A_{t_1 t_2'} (\delta_{t_2' t_2''} - A_{t_1 t_2''}) \right] \left[ \frac{1}{\sqrt{d_{out}}} \delta_{t_2'' t_2} \right]$$
+<p>由于 $\delta_{t_2'' t_2}$， $t_2''$ 上的求和坍缩，我们只需令 $t_2'' = t_2$:</p>
+$$\frac{\partial A_{t_1 t_2'}}{\partial S_{t_1 t_2}} = \frac{1}{\sqrt{d_{out}}} A_{t_1 t_2'} (\delta_{t_2' t_2} - A_{t_1 t_2})$$
 </li>
 </ol>
 </li>
 <li>
 <p>代回 $G^S$ 的推导：</p>
-<p>$$G^S_{t_1 t_2} = \sum_{t_2&rsquo;} G^A_{t_1 t_2&rsquo;} \left[ \frac{1}{\sqrt{d_{out}}} A_{t_1 t_2&rsquo;} (\delta_{t_2&rsquo; t_2} - A_{t_1 t_2}) \right]$$</p>
-<p>$$G^S_{t_1 t_2} = \frac{1}{\sqrt{d_{out}}} \sum_{t_2&rsquo;} \left( G^A_{t_1 t_2&rsquo;} A_{t_1 t_2&rsquo;} \delta_{t_2&rsquo; t_2} - G^A_{t_1 t_2&rsquo;} A_{t_1 t_2&rsquo;} A_{t_1 t_2} \right)$$</p>
+$$G^S_{t_1 t_2} = \sum_{t_2'} G^A_{t_1 t_2'} \left[ \frac{1}{\sqrt{d_{out}}} A_{t_1 t_2'} (\delta_{t_2' t_2} - A_{t_1 t_2}) \right]$$
+$$G^S_{t_1 t_2} = \frac{1}{\sqrt{d_{out}}} \sum_{t_2'} \left( G^A_{t_1 t_2'} A_{t_1 t_2'} \delta_{t_2' t_2} - G^A_{t_1 t_2'} A_{t_1 t_2'} A_{t_1 t_2} \right)$$
 </li>
 <li>
 <p><strong>拆分求和：</strong></p>
 <ol>
 <li>
-<p>$\sum_{t_2&rsquo;} G^A_{t_1 t_2&rsquo;} A_{t_1 t_2&rsquo;} \delta_{t_2&rsquo; t_2}$ = (由于 $\delta_{t_2&rsquo; t_2}$， $t_2&rsquo;$ 上的求和坍缩) = $G^A_{t_1 t_2} A_{t_1 t_2}$</p>
+<p>$\sum_{t_2'} G^A_{t_1 t_2'} A_{t_1 t_2'} \delta_{t_2' t_2}$ = (由于 $\delta_{t_2' t_2}$， $t_2'$ 上的求和坍缩) = $G^A_{t_1 t_2} A_{t_1 t_2}$</p>
 </li>
 <li>
-<p>$\sum_{t_2&rsquo;} G^A_{t_1 t_2&rsquo;} A_{t_1 t_2&rsquo;} A_{t_1 t_2} = A_{t_1 t_2} \sum_{t_2&rsquo;} G^A_{t_1 t_2&rsquo;} A_{t_1 t_2&rsquo;}$</p>
+<p>$\sum_{t_2'} G^A_{t_1 t_2'} A_{t_1 t_2'} A_{t_1 t_2} = A_{t_1 t_2} \sum_{t_2'} G^A_{t_1 t_2'} A_{t_1 t_2'}$</p>
 </li>
 </ol>
 </li>
 <li>
 <p>组合：</p>
-<p>$$G^S_{t_1 t_2} = \frac{1}{\sqrt{d_{out}}} \left( G^A_{t_1 t_2} A_{t_1 t_2} - A_{t_1 t_2} \sum_{t_2&rsquo;} G^A_{t_1 t_2&rsquo;} A_{t_1 t_2&rsquo;} \right)$$</p>
-<p>$$G^S_{t_1 t_2} = \frac{A_{t_1 t_2}}{\sqrt{d_{out}}} \left( G^A_{t_1 t_2} - \sum_{t_2&rsquo;} G^A_{t_1 t_2&rsquo;} A_{t_1 t_2&rsquo;} \right)$$</p>
+$$G^S_{t_1 t_2} = \frac{1}{\sqrt{d_{out}}} \left( G^A_{t_1 t_2} A_{t_1 t_2} - A_{t_1 t_2} \sum_{t_2'} G^A_{t_1 t_2'} A_{t_1 t_2'} \right)$$
+$$G^S_{t_1 t_2} = \frac{A_{t_1 t_2}}{\sqrt{d_{out}}} \left( G^A_{t_1 t_2} - \sum_{t_2'} G^A_{t_1 t_2'} A_{t_1 t_2'} \right)$$
 </li>
 <li>
 <p>用爱因斯坦约定表示：</p>
-<p>$$G^S_{t_1 t_2} = \frac{A_{t_1 t_2}}{\sqrt{d_{out}}} (G^A_{t_1 t_2} - G^A_{t_1 t_2&rsquo;} A_{t_1 t_2&rsquo;})$$</p>
-<p>(其中 $t_2&rsquo;$ 是在 $G^A$ 和 $A$ 的逐元素乘积上求和的哑索引。)</p>
+$$G^S_{t_1 t_2} = \frac{A_{t_1 t_2}}{\sqrt{d_{out}}} (G^A_{t_1 t_2} - G^A_{t_1 t_2'} A_{t_1 t_2'})$$
+<p>(其中 $t_2'$ 是在 $G^A$ 和 $A$ 的逐元素乘积上求和的哑索引。)</p>
 </li>
 </ul>
 <p><strong>步骤 2.3：计算 $\frac{\partial L}{\partial Q}$ (即 $G^Q$)</strong></p>
@@ -625,14 +626,14 @@ $$</p>
 </li>
 <li>
 <p>应用链式法则： (现在我们使用 $G^S$ 作为上游梯度)</p>
-<p>$$G^Q_{t_1 j} = \frac{\partial L}{\partial Q_{t_1 j}} = \sum_{t_1&rsquo;} \sum_{t_2&rsquo;} \frac{\partial L}{\partial S_{t_1&rsquo; t_2&rsquo;}} \frac{\partial S_{t_1&rsquo; t_2&rsquo;}}{\partial Q_{t_1 j}}$$</p>
+$$G^Q_{t_1 j} = \frac{\partial L}{\partial Q_{t_1 j}} = \sum_{t_1'} \sum_{t_2'} \frac{\partial L}{\partial S_{t_1' t_2'}} \frac{\partial S_{t_1' t_2'}}{\partial Q_{t_1 j}}$$
 </li>
 <li>
-<p><strong>计算局部梯度：</strong> $\frac{\partial S_{t_1&rsquo; t_2&rsquo;}}{\partial Q_{t_1 j}} = \frac{\partial (Q_{t_1&rsquo; j&rsquo;} K_{t_2&rsquo; j&rsquo;})}{\partial Q_{t_1 j}} = \delta_{t_1&rsquo; t_1} K_{t_2&rsquo; j}$</p>
+<p><strong>计算局部梯度：</strong> $\frac{\partial S_{t_1' t_2'}}{\partial Q_{t_1 j}} = \frac{\partial (Q_{t_1' j'} K_{t_2' j'})}{\partial Q_{t_1 j}} = \delta_{t_1' t_1} K_{t_2' j}$</p>
 </li>
 <li>
 <p>代回（并使用爱因斯坦约定）：</p>
-<p>$$G^Q_{t_1 j} = G^S_{t_1 t_2} K_{t_2 j}$$</p>
+$$G^Q_{t_1 j} = G^S_{t_1 t_2} K_{t_2 j}$$
 </li>
 </ul>
 <p><strong>步骤 2.4：计算 $\frac{\partial L}{\partial K}$ (即 $G^K$)</strong></p>
@@ -642,14 +643,14 @@ $$</p>
 </li>
 <li>
 <p>应用链式法则：</p>
-<p>$$G^K_{t_2 j} = \frac{\partial L}{\partial K_{t_2 j}} = \sum_{t_1&rsquo;} \sum_{t_2&rsquo;} \frac{\partial L}{\partial S_{t_1&rsquo; t_2&rsquo;}} \frac{\partial S_{t_1&rsquo; t_2&rsquo;}}{\partial K_{t_2 j}}$$</p>
+$$G^K_{t_2 j} = \frac{\partial L}{\partial K_{t_2 j}} = \sum_{t_1'} \sum_{t_2'} \frac{\partial L}{\partial S_{t_1' t_2'}} \frac{\partial S_{t_1' t_2'}}{\partial K_{t_2 j}}$$
 </li>
 <li>
-<p><strong>计算局部梯度：</strong> $\frac{\partial S_{t_1&rsquo; t_2&rsquo;}}{\partial K_{t_2 j}} = \frac{\partial (Q_{t_1&rsquo; j&rsquo;} K_{t_2&rsquo; j&rsquo;})}{\partial K_{t_2 j}} = Q_{t_1&rsquo; j&rsquo;} \delta_{t_2&rsquo; t_2}$</p>
+<p><strong>计算局部梯度：</strong> $\frac{\partial S_{t_1' t_2'}}{\partial K_{t_2 j}} = \frac{\partial (Q_{t_1' j'} K_{t_2' j'})}{\partial K_{t_2 j}} = Q_{t_1' j'} \delta_{t_2' t_2}$</p>
 </li>
 <li>
 <p>代回（并使用爱因斯坦约定）：</p>
-<p>$$G^K_{t_2 j} = G^S_{t_1 t_2} Q_{t_1 j}$$</p>
+$$G^K_{t_2 j} = G^S_{t_1 t_2} Q_{t_1 j}$$
 </li>
 </ul>
 <p><strong>步骤 2.5：计算 $\frac{\partial L}{\partial W^Q}$</strong></p>
@@ -659,14 +660,14 @@ $$</p>
 </li>
 <li>
 <p>应用链式法则：</p>
-<p>$$\frac{\partial L}{\partial W^Q_{ji}} = \sum_{t_1&rsquo;} \sum_{j&rsquo;} \frac{\partial L}{\partial Q_{t_1&rsquo; j&rsquo;}} \frac{\partial Q_{t_1&rsquo; j&rsquo;}}{\partial W^Q_{ji}}$$</p>
+$$\frac{\partial L}{\partial W^Q_{ji}} = \sum_{t_1'} \sum_{j'} \frac{\partial L}{\partial Q_{t_1' j'}} \frac{\partial Q_{t_1' j'}}{\partial W^Q_{ji}}$$
 </li>
 <li>
-<p><strong>计算局部梯度：</strong> $\frac{\partial Q_{t_1&rsquo; j&rsquo;}}{\partial W^Q_{ji}} = \frac{\partial (X_{t_1&rsquo; i&rsquo;} W^Q_{j&rsquo; i&rsquo;})}{\partial W^Q_{ji}} = X_{t_1&rsquo; i} \delta_{j&rsquo; j}$</p>
+<p><strong>计算局部梯度：</strong> $\frac{\partial Q_{t_1' j'}}{\partial W^Q_{ji}} = \frac{\partial (X_{t_1' i'} W^Q_{j' i'})}{\partial W^Q_{ji}} = X_{t_1' i} \delta_{j' j}$</p>
 </li>
 <li>
 <p>代回（并使用爱因斯坦约定）：</p>
-<p>$$\frac{\partial L}{\partial W^Q_{ji}} = G^Q_{t_1 j} X_{t_1 i}$$</p>
+$$\frac{\partial L}{\partial W^Q_{ji}} = G^Q_{t_1 j} X_{t_1 i}$$
 </li>
 </ul>
 <p><strong>步骤 2.6：计算 $\frac{\partial L}{\partial W^K}$</strong></p>
@@ -676,21 +677,21 @@ $$</p>
 </li>
 <li>
 <p>应用链式法则：</p>
-<p>$$\frac{\partial L}{\partial W^K_{jk}} = \sum_{t_2&rsquo;} \sum_{j&rsquo;} \frac{\partial L}{\partial K_{t_2&rsquo; j&rsquo;}} \frac{\partial K_{t_2&rsquo; j&rsquo;}}{\partial W^K_{jk}}$$</p>
+$$\frac{\partial L}{\partial W^K_{jk}} = \sum_{t_2'} \sum_{j'} \frac{\partial L}{\partial K_{t_2' j'}} \frac{\partial K_{t_2' j'}}{\partial W^K_{jk}}$$
 </li>
 <li>
-<p>计算局部梯度： $\frac{\partial K_{t_2&rsquo; j&rsquo;}}{\partial W^K_{jk}} = \frac{\partial (X_{t_2&rsquo; k&rsquo;} W^K_{j&rsquo; k&rsquo;})}{\partial W^K_{jk}} = X_{t_2&rsquo; k} \delta_{j&rsquo; j}$</p>
+<p>计算局部梯度： $\frac{\partial K_{t_2' j'}}{\partial W^K_{jk}} = \frac{\partial (X_{t_2' k'} W^K_{j' k'})}{\partial W^K_{jk}} = X_{t_2' k} \delta_{j' j}$</p>
 </li>
 <li>
 <p>代回（并使用爱因斯坦约定）：</p>
-<p>$$\frac{\partial L}{\partial W^K_{jk}} = G^K_{t_2 j} X_{t_2 k}$$</p>
+$$\frac{\partial L}{\partial W^K_{jk}} = G^K_{t_2 j} X_{t_2 k}$$
 </li>
 </ul>
 <p><strong>$W^Q$ 和 $W^K$ 梯度总结</strong></p>
 <p>将 <strong>2.3</strong> 代入 <strong>2.5</strong>，得到 $W^Q$ 的最终梯度：</p>
-<p>$$\frac{\partial L}{\partial W^Q_{ji}} = (G^S_{t_1 t_2} K_{t_2 j}) X_{t_1 i}$$</p>
+$$\frac{\partial L}{\partial W^Q_{ji}} = (G^S_{t_1 t_2} K_{t_2 j}) X_{t_1 i}$$
 <p>将 <strong>2.4</strong> 代入 <strong>2.6</strong>，得到 $W^K$ 的最终梯度：</p>
-<p>$$\frac{\partial L}{\partial W^K_{jk}} = (G^S_{t_1 t_2} Q_{t_1 j}) X_{t_2 k}$$</p>
+$$\frac{\partial L}{\partial W^K_{jk}} = (G^S_{t_1 t_2} Q_{t_1 j}) X_{t_2 k}$$
 <p>其中 $G^S_{t_1 t_2}$ 由<strong>步骤 2.2</strong> 定义。</p>
 <hr>
 <h4 id="最终梯度总结">最终梯度总结
@@ -698,7 +699,7 @@ $$</p>
 <ol>
 <li>
 <p>Value 权重梯度 ($W^V$):</p>
-<p>$$\frac{\partial L}{\partial W^V_{jk}} = \left( \frac{\partial L}{\partial Y_{t_1 j}} A_{t_1 t_2} \right) X_{t_2 k}$$</p>
+$$\frac{\partial L}{\partial W^V_{jk}} = \left( \frac{\partial L}{\partial Y_{t_1 j}} A_{t_1 t_2} \right) X_{t_2 k}$$
 </li>
 </ol>
 <blockquote>
@@ -707,21 +708,22 @@ $$</p>
 <ol>
 <li>
 <p>Query 权重梯度 ($W^Q$):</p>
-<p>$$\frac{\partial L}{\partial W^Q_{ji}} = \left( \frac{\partial L}{\partial S_{t_1 t_2}} K_{t_2 j} \right) X_{t_1 i}$$
+$$\frac{\partial L}{\partial W^Q_{ji}} = \left( \frac{\partial L}{\partial S_{t_1 t_2}} K_{t_2 j} \right) X_{t_1 i}$$
+<p>
 公式解释：</p>
 </li>
 <li>
 <p>Key 权重梯度 ($W^K$):</p>
-<p>$$\frac{\partial L}{\partial W^K_{jk}} = \left( \frac{\partial L}{\partial S_{t_1 t_2}} Q_{t_1 j} \right) X_{t_2 k}$$</p>
+$$\frac{\partial L}{\partial W^K_{jk}} = \left( \frac{\partial L}{\partial S_{t_1 t_2}} Q_{t_1 j} \right) X_{t_2 k}$$
 </li>
 </ol>
 <p>其中，关键的中间梯度 $\frac{\partial L}{\partial S_{t_1 t_2}}$ (即 $G^S$) 定义为：</p>
-<p>$$\frac{\partial L}{\partial S_{t_1 t_2}} = \frac{A_{t_1 t_2}}{\sqrt{d_{out}}} \left( \frac{\partial L}{\partial A_{t_1 t_2}} - \sum_{t_2&rsquo;} \frac{\partial L}{\partial A_{t_1 t_2&rsquo;}} A_{t_1 t_2&rsquo;} \right)$$</p>
+$$\frac{\partial L}{\partial S_{t_1 t_2}} = \frac{A_{t_1 t_2}}{\sqrt{d_{out}}} \left( \frac{\partial L}{\partial A_{t_1 t_2}} - \sum_{t_2'} \frac{\partial L}{\partial A_{t_1 t_2'}} A_{t_1 t_2'} \right)$$
 <blockquote>
 <p>公式解释: 注意力权重对损失的贡献既要看直接贡献也要看平均贡献。括号内的求和实际上就是求平均贡献，是一个相对标准，它奖励那些表现优于“平均水平”的得分，并惩罚那些表现不如平均水平的得分。</p>
 </blockquote>
 <p>而 $\frac{\partial L}{\partial A_{t_1 t_2}}$ (即 $G^A$) 定义为：</p>
-<p>$$\frac{\partial L}{\partial A_{t_1 t_2}} = \frac{\partial L}{\partial Y_{t_1 j}} V_{t_2 j}$$</p>
+$$\frac{\partial L}{\partial A_{t_1 t_2}} = \frac{\partial L}{\partial Y_{t_1 j}} V_{t_2 j}$$
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1

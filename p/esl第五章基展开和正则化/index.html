@@ -333,16 +333,17 @@
 </ol>
 <h1 id="分段多项式与样条">分段多项式与样条
 </h1><p>分段常数是1阶样条，连续分段线性函数是2阶样条。以下是阶段幂基函数的广义形式：
+</p>
 $$
-h_{j}^{}\left( X \right) =X_{}^{j-1},\ j=1,&hellip;,M, \
-h_{M+l}\left( X \right) =\left( X-\xi _l \right) _{+}^{M-1},\ l=1,&hellip;,K.
-$$</p>
+h_{j}^{}\left( X \right) =X_{}^{j-1},\ j=1,...,M, \\
+h_{M+l}\left( X \right) =\left( X-\xi _l \right) _{+}^{M-1},\ l=1,...,K.
+$$
 <p>上式中的 $h_j(X)$ 是起始点的各阶基函数， $h_{M+l}(X)$ 是分段后的基函数。<br>
 于是原函数可以被这些基函数线性表示，基的数量计算：<br>
 基函数个数 = (区域数) * (每区域参数个数) - (分段点个数) * (每个分段点的约束数量)，即：</p>
-<p>$$
-\left( K+1 \right) \times \left( M \right) -\left( K \right) \times \left( M-1 \right)
-$$</p>
+$$
+\left( K+1 \right) \times \left( M \right) -\left( K \right) \times \left( M-1 \right) 
+$$
 <p>这些固定节点的样条都称为<strong>回归样条</strong>，这些方法需要选择样条的阶数、节点的个数和位置。</p>
 <h1 id="正则化和再生核希尔伯特空间rkhs">正则化和再生核希尔伯特空间（RKHS）
 </h1><p>广义的正则化问题，即使是在无穷维函数空间上，它的解依然是有限维的。
