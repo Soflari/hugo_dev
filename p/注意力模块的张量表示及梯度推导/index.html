@@ -429,18 +429,12 @@
 </li>
 <li><strong><code>attn_scores</code> 的计算 (线性)</strong>
 <code>attn_scores = torch.matmul(q, k.T)</code>。这是一个矩阵乘法，它在 $j$ (即 $d_out$) 维度上进行缩并。
-<ul>
-<li>$S_{t_1 t_2} = Q_{t_1 j} K_{t_2 j}$</li>
-</ul>
-</li>
+$$S_{t_1 t_2} = Q_{t_1 j} K_{t_2 j}$$</li>
 <li><strong><code>attn_weights</code> 的计算 (非线性)</strong>
 <code>attn_weights = torch.softmax(...)</code>。这一步是<strong>非线性的</strong>，不能用简单的张量缩并表示。我们将其定义为函数 $A = \text{softmax}(S^{\prime})$：
-<ul>
-<li>$S&rsquo;<em>{t_1 t_2} = S</em>{t_1 t_2} / \sqrt{d_{out}}$</li>
-<li>$A_{t_1 t_2} = \frac{\exp(S^{\prime}<em>{t_1 t_2})}{\mathbf{1}</em>{t_2^{\prime}} \exp(S^{\prime}<em>{t_1 t_2^{\prime}})}$
+$$S&rsquo;<em>{t_1 t_2} = S</em>{t_1 t_2} / \sqrt{d_{out}}$$
+$$A_{t_1 t_2} = \frac{\exp(S^{\prime}<em>{t_1 t_2})}{\mathbf{1}</em>{t_2^{\prime}} \exp(S^{\prime}<em>{t_1 t_2^{\prime}})}$$
 $A</em>{t_1 t_2}$ 是最终的注意力权重矩阵。</li>
-</ul>
-</li>
 <li><strong><code>context_vecs</code> 的计算 (线性)</strong>
 <code>context_vecs = torch.matmul(attn_weights, v)</code>。这是注意力权重 $A$ 和值 $V$ 之间的矩阵乘法。它在 $t_2$ 维度（序列）上进行缩并：
 $$Y_{t_1 j} = A_{t_1 t_2} V_{t_2 j}$$</li>
