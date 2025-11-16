@@ -424,37 +424,36 @@
 从张量角度看，
 </p>
 $$
-x_{b1ij}=x_{bn}, \quad n=0*28*28+i*28+j
-$$
+    x_{b1ij}=x_{bn}, \quad n=0*28*28+i*28+j
+    $$
 </li>
 <li>
 <p><code>linear_relu_stack</code><br>
 这个函数将一系列的神经层排成一个列表，数据将从这些层中流出。过程中会改变维度。</p>
 <ol>
-<li><code>Linear(28*28, 512)</code>
+<li><code>Linear(28*28, 512)</code><br>
 张量表示: $y_{bm}=x_{bn}w_{nm}+\mathbf{1}_{b}b_{m}$</li>
-<li><code>ReLU</code>
+<li><code>ReLU</code><br>
 张量表示: $y_{bm}^{r}=\text{ReLU}(y_{bm})$</li>
-<li><code>Linear(512,512)</code>
+<li><code>Linear(512,512)</code><br>
 张量表示: $y_{bm'}'=y_{bm}^{r}w_{mm'}+\mathbf{1}_{b}b_{m'}$</li>
-<li><code>ReLU</code>
+<li><code>ReLU</code><br>
 张量表示: $y_{bm'}^{r}=\text{ReLU}(y_{bm'})$</li>
-<li><code>Linear(512,10)</code>
+<li><code>Linear(512,10)</code><br>
 张量表示: $y_{bo}=y_{bm'}^{r}w_{m'o}+\mathbf{1}_{b}b_{o}$</li>
 </ol>
 </li>
 <li>
-<p><code>Softmax(dim=1)</code>
-张量表示：
+<p><code>Softmax(dim=1)</code><br>
+张量表示：<br>
 </p>
 $$s_{bi}= \frac{e^{x_{bi}}}{\mathbf{1}_{kj}e^{x_{kj}}}$$
-</li>
-<li>
-<p>交叉熵损失
+<p>
+4. 交叉熵损失
 </p>
 $$
-c_{b}=-\log{s_{b\text{T}}}
-$$
+    c_{b}=-\log{s_{b\text{T}}}
+    $$
 <p>
 交叉熵损失是单分类损失函数，这里的$\text{T}$是代表真实标签的常量索引，这里的$\text{T}$不是一种哑指标。</p>
 </li>
@@ -462,22 +461,28 @@ $$
 <h2 id="推导梯度">推导梯度
 </h2><p>重点是利用反向传播，也就是由终点向起点一层层推。</p>
 <ol>
-<li>$c_{b}$
+<li>
+<p>$c_{b}$
+</p>
 $$
-\frac{\partial c_{b}}{\partial s_{ki}}=-\frac{\partial \log s_{b\text{T}}}{\partial s_{ki}}
-=-\frac{1}{s_{k\text{T}}}\delta_{i\text{T}}
-$$</li>
-<li>$s_{bi}$
+    \frac{\partial c_{b}}{\partial s_{ki}}=-\frac{\partial \log s_{b\text{T}}}{\partial s_{ki}}
+    =-\frac{1}{s_{k\text{T}}}\delta_{i\text{T}}
+    $$
+</li>
+<li>
+<p>$s_{bi}$
+</p>
 $$
-\frac{\partial s_{bi}}{\partial y_{ko}}
-=\frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
+    \frac{\partial s_{bi}}{\partial y_{ko}}
+    =\frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
+    $$
+<p>
+令$\sigma=\mathbf{1}_{kj}e^{x_{kj}}$,</p>
 $$
-令$\sigma=\mathbf{1}_{kj}e^{x_{kj}}$,
-$$
-\frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
-=\frac{\partial\sigma}{\partial y_{ko}}
-=\frac{1}{\sigma^2}( \frac{\partial e^{y_{bi}}}{\partial y_{ko}}\sigma-e^{y_{bi}}\frac{\partial \sigma}{\partial y_{ko}})
-$$
+    \frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
+    =\frac{\partial\sigma}{\partial y_{ko}}
+    =\frac{1}{\sigma^2}( \frac{\partial e^{y_{bi}}}{\partial y_{ko}}\sigma-e^{y_{bi}}\frac{\partial \sigma}{\partial y_{ko}})
+    $$
 <ol>
 <li>$\frac{\partial e^{y_{bi}}}{\partial y_{ko}}$
 $$\frac{\partial e^{y_{bi}}}{\partial y_{ko}}
@@ -486,27 +491,32 @@ $$\frac{\partial e^{y_{bi}}}{\partial y_{ko}}
 <li>$\frac{\partial \sigma}{\partial y_{ko}}$
 $$\frac{\partial \sigma}{\partial y_{ko}}=\frac{\partial \mathbf{1}_{bj}e^{y_{bj}}}{\partial y_{ko}}
 	=\mathbf{1}_{bj}e^{y_{bj}}\delta_{bk}\delta_{jo}=\mathbf{1}_{ko}e^{y_{ko}}
-	=e^{y_{ko}} $$
-代入原式：
+	=e^{y_{ko}} $$</li>
+</ol>
+</li>
+</ol>
+<p>代入原式：
+</p>
 $$
 \frac{1}{\sigma^2}( \frac{\partial e^{y_{bi}}}{\partial y_{ko}}\sigma-e^{y_{bi}}\frac{\partial \sigma}{\partial y_{ko}})
 =\frac{1}{\sigma^2}( e^{y_{bi}}\delta_{bk}\delta_{io}\sigma-e^{y_{bi}}e^{y_{ko}})
 =s_{bi}\delta_{bk}\delta_{io}-s_{bi}s_{ko}
 $$
+<p>
 即
+</p>
 $$\frac{\partial s_{bi}}{\partial y_{ko}}
 =s_{bi}\delta_{bk}\delta_{io}-s_{bi}s_{ko}$$
-综合一下，现在就有
+<p>
+综合一下，现在就有</p>
 $$
 \frac{\partial c_{b}}{\partial y_{ko}}
 =\frac{\partial c_{b}}{\partial s_{ki}}\frac{\partial s_{bi}}{\partial y_{ko}}
 =-\frac{1}{s_{k\text{T}}}\delta_{i\text{T}}(s_{bi}\delta_{bk}\delta_{io}-s_{bi}s_{ko})
 =s_{ko}-\delta_{bk}\delta_{To}
 $$
-这里可以看出，交叉熵损失在最后一层的梯度，恰好等于第$k$个样本的第$o$个logits(概率值)减去第$k$个样本的第$\text{T}$个标签(也就是1).</li>
-</ol>
-</li>
-</ol>
+<p><br>
+这里可以看出，交叉熵损失在最后一层的梯度，恰好等于第$k$个样本的第$o$个logits(概率值)减去第$k$个样本的第$\text{T}$个标签(也就是1).</p>
 
 </section>
 

@@ -82,37 +82,36 @@
 从张量角度看，
 &lt;/p&gt;
 $$
-x_{b1ij}=x_{bn}, \quad n=0*28*28+i*28+j
-$$
+    x_{b1ij}=x_{bn}, \quad n=0*28*28+i*28+j
+    $$
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;code&gt;linear_relu_stack&lt;/code&gt;&lt;br&gt;
 这个函数将一系列的神经层排成一个列表，数据将从这些层中流出。过程中会改变维度。&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;code&gt;Linear(28*28, 512)&lt;/code&gt;
+&lt;li&gt;&lt;code&gt;Linear(28*28, 512)&lt;/code&gt;&lt;br&gt;
 张量表示: $y_{bm}=x_{bn}w_{nm}+\mathbf{1}_{b}b_{m}$&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ReLU&lt;/code&gt;
+&lt;li&gt;&lt;code&gt;ReLU&lt;/code&gt;&lt;br&gt;
 张量表示: $y_{bm}^{r}=\text{ReLU}(y_{bm})$&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Linear(512,512)&lt;/code&gt;
+&lt;li&gt;&lt;code&gt;Linear(512,512)&lt;/code&gt;&lt;br&gt;
 张量表示: $y_{bm&#39;}&#39;=y_{bm}^{r}w_{mm&#39;}+\mathbf{1}_{b}b_{m&#39;}$&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ReLU&lt;/code&gt;
+&lt;li&gt;&lt;code&gt;ReLU&lt;/code&gt;&lt;br&gt;
 张量表示: $y_{bm&#39;}^{r}=\text{ReLU}(y_{bm&#39;})$&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Linear(512,10)&lt;/code&gt;
+&lt;li&gt;&lt;code&gt;Linear(512,10)&lt;/code&gt;&lt;br&gt;
 张量表示: $y_{bo}=y_{bm&#39;}^{r}w_{m&#39;o}+\mathbf{1}_{b}b_{o}$&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;code&gt;Softmax(dim=1)&lt;/code&gt;
-张量表示：
+&lt;p&gt;&lt;code&gt;Softmax(dim=1)&lt;/code&gt;&lt;br&gt;
+张量表示：&lt;br&gt;
 &lt;/p&gt;
 $$s_{bi}= \frac{e^{x_{bi}}}{\mathbf{1}_{kj}e^{x_{kj}}}$$
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;交叉熵损失
+&lt;p&gt;
+4. 交叉熵损失
 &lt;/p&gt;
 $$
-c_{b}=-\log{s_{b\text{T}}}
-$$
+    c_{b}=-\log{s_{b\text{T}}}
+    $$
 &lt;p&gt;
 交叉熵损失是单分类损失函数，这里的$\text{T}$是代表真实标签的常量索引，这里的$\text{T}$不是一种哑指标。&lt;/p&gt;
 &lt;/li&gt;
@@ -120,22 +119,28 @@ $$
 &lt;h2 id=&#34;推导梯度&#34;&gt;推导梯度
 &lt;/h2&gt;&lt;p&gt;重点是利用反向传播，也就是由终点向起点一层层推。&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;$c_{b}$
+&lt;li&gt;
+&lt;p&gt;$c_{b}$
+&lt;/p&gt;
 $$
-\frac{\partial c_{b}}{\partial s_{ki}}=-\frac{\partial \log s_{b\text{T}}}{\partial s_{ki}}
-=-\frac{1}{s_{k\text{T}}}\delta_{i\text{T}}
-$$&lt;/li&gt;
-&lt;li&gt;$s_{bi}$
+    \frac{\partial c_{b}}{\partial s_{ki}}=-\frac{\partial \log s_{b\text{T}}}{\partial s_{ki}}
+    =-\frac{1}{s_{k\text{T}}}\delta_{i\text{T}}
+    $$
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$s_{bi}$
+&lt;/p&gt;
 $$
-\frac{\partial s_{bi}}{\partial y_{ko}}
-=\frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
+    \frac{\partial s_{bi}}{\partial y_{ko}}
+    =\frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
+    $$
+&lt;p&gt;
+令$\sigma=\mathbf{1}_{kj}e^{x_{kj}}$,&lt;/p&gt;
 $$
-令$\sigma=\mathbf{1}_{kj}e^{x_{kj}}$,
-$$
-\frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
-=\frac{\partial\sigma}{\partial y_{ko}}
-=\frac{1}{\sigma^2}( \frac{\partial e^{y_{bi}}}{\partial y_{ko}}\sigma-e^{y_{bi}}\frac{\partial \sigma}{\partial y_{ko}})
-$$
+    \frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
+    =\frac{\partial\sigma}{\partial y_{ko}}
+    =\frac{1}{\sigma^2}( \frac{\partial e^{y_{bi}}}{\partial y_{ko}}\sigma-e^{y_{bi}}\frac{\partial \sigma}{\partial y_{ko}})
+    $$
 &lt;ol&gt;
 &lt;li&gt;$\frac{\partial e^{y_{bi}}}{\partial y_{ko}}$
 $$\frac{\partial e^{y_{bi}}}{\partial y_{ko}}
@@ -144,27 +149,32 @@ $$\frac{\partial e^{y_{bi}}}{\partial y_{ko}}
 &lt;li&gt;$\frac{\partial \sigma}{\partial y_{ko}}$
 $$\frac{\partial \sigma}{\partial y_{ko}}=\frac{\partial \mathbf{1}_{bj}e^{y_{bj}}}{\partial y_{ko}}
 	=\mathbf{1}_{bj}e^{y_{bj}}\delta_{bk}\delta_{jo}=\mathbf{1}_{ko}e^{y_{ko}}
-	=e^{y_{ko}} $$
-代入原式：
+	=e^{y_{ko}} $$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;代入原式：
+&lt;/p&gt;
 $$
 \frac{1}{\sigma^2}( \frac{\partial e^{y_{bi}}}{\partial y_{ko}}\sigma-e^{y_{bi}}\frac{\partial \sigma}{\partial y_{ko}})
 =\frac{1}{\sigma^2}( e^{y_{bi}}\delta_{bk}\delta_{io}\sigma-e^{y_{bi}}e^{y_{ko}})
 =s_{bi}\delta_{bk}\delta_{io}-s_{bi}s_{ko}
 $$
+&lt;p&gt;
 即
+&lt;/p&gt;
 $$\frac{\partial s_{bi}}{\partial y_{ko}}
 =s_{bi}\delta_{bk}\delta_{io}-s_{bi}s_{ko}$$
-综合一下，现在就有
+&lt;p&gt;
+综合一下，现在就有&lt;/p&gt;
 $$
 \frac{\partial c_{b}}{\partial y_{ko}}
 =\frac{\partial c_{b}}{\partial s_{ki}}\frac{\partial s_{bi}}{\partial y_{ko}}
 =-\frac{1}{s_{k\text{T}}}\delta_{i\text{T}}(s_{bi}\delta_{bk}\delta_{io}-s_{bi}s_{ko})
 =s_{ko}-\delta_{bk}\delta_{To}
 $$
-这里可以看出，交叉熵损失在最后一层的梯度，恰好等于第$k$个样本的第$o$个logits(概率值)减去第$k$个样本的第$\text{T}$个标签(也就是1).&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;br&gt;
+这里可以看出，交叉熵损失在最后一层的梯度，恰好等于第$k$个样本的第$o$个logits(概率值)减去第$k$个样本的第$\text{T}$个标签(也就是1).&lt;/p&gt;
 </description>
         </item>
         <item>
