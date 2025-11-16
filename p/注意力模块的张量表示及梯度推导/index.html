@@ -434,10 +434,10 @@
 </ul>
 </li>
 <li><strong><code>attn_weights</code> 的计算 (非线性)</strong>
-<code>attn_weights = torch.softmax(...)</code>。这一步是<strong>非线性的</strong>，不能用简单的张量缩并表示。我们将其定义为函数 $A = \text{softmax}(S&rsquo;)$：
+<code>attn_weights = torch.softmax(...)</code>。这一步是<strong>非线性的</strong>，不能用简单的张量缩并表示。我们将其定义为函数 $A = \text{softmax}(S^{\prime})$：
 <ul>
 <li>$S&rsquo;<em>{t_1 t_2} = S</em>{t_1 t_2} / \sqrt{d_{out}}$</li>
-<li>$A_{t_1 t_2} = \frac{\exp(S&rsquo;<em>{t_1 t_2})}{\mathbf{1}</em>{t_2&rsquo;} \exp(S&rsquo;<em>{t_1 t_2&rsquo;})}$
+<li>$A_{t_1 t_2} = \frac{\exp(S^{\prime}<em>{t_1 t_2})}{\mathbf{1}</em>{t_2^{\prime}} \exp(S^{\prime}<em>{t_1 t_2^{\prime}})}$
 $A</em>{t_1 t_2}$ 是最终的注意力权重矩阵。</li>
 </ul>
 </li>
