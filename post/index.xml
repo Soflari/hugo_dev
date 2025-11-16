@@ -7,7 +7,29 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Soflari</copyright>
-        <lastBuildDate>Sun, 16 Nov 2025 23:53:52 +0800</lastBuildDate><atom:link href="http://localhost:1313/hugo_dev/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 17 Nov 2025 01:12:58 +0800</lastBuildDate><atom:link href="http://localhost:1313/hugo_dev/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Hugo博客的数学公式问题</title>
+        <link>http://localhost:1313/hugo_dev/p/hugo%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E9%97%AE%E9%A2%98/</link>
+        <pubDate>Mon, 17 Nov 2025 01:12:58 +0800</pubDate>
+        
+        <guid>http://localhost:1313/hugo_dev/p/hugo%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E9%97%AE%E9%A2%98/</guid>
+        <description>&lt;p&gt;在探索使用hugo建立博客的过程中，遇到了数学公式难以渲染的问题。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;如何配置hugo的数学环境
+&lt;a class=&#34;link&#34; href=&#34;https://www.1zh.tech/posts/hugo-papermod-math/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;如何在 Hugo 中使用数学公式？&lt;/a&gt;
+&lt;strong&gt;tips:&lt;/strong&gt; KaTex 中的行内公式也是支持使用&lt;code&gt;$inline_equation$&lt;/code&gt;的&lt;/li&gt;
+&lt;li&gt;Markdown下的Tex渲染失败解决
+hugo网页渲染是网站和公式两个渲染引擎同时作用的，所以要设置优先级，让公式优先被公式引擎渲染。
+&lt;a class=&#34;link&#34; href=&#34;https://blog2.pillar.fun/p/markdown%E4%B8%8B%E7%9A%84tex%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E8%A7%A3%E5%86%B3/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Markdown下的Tex渲染失败解决&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;KaTex常用数学公式
+&lt;a class=&#34;link&#34; href=&#34;https://kissingfire123.github.io/2022/02/18_%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8Fkatex%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/#%E9%9B%B6-%E5%89%8D%E8%A8%80&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;常用数学公式排版KaTex语法总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>注意力模块的张量表示及梯度推导</title>
         <link>http://localhost:1313/hugo_dev/p/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/</link>
         <pubDate>Sun, 16 Nov 2025 23:53:52 +0800</pubDate>
@@ -79,9 +101,9 @@
 &lt;code&gt;attn_scores = torch.matmul(q, k.T)&lt;/code&gt;。这是一个矩阵乘法，它在 $j$ (即 $d\_out$) 维度上进行缩并。
 $$S_{t_1 t_2} = Q_{t_1 j} K_{t_2 j}$$&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;&lt;code&gt;attn_weights&lt;/code&gt; 的计算 (非线性)&lt;/strong&gt;
-&lt;code&gt;attn_weights = torch.softmax(...)&lt;/code&gt;。这一步是&lt;strong&gt;非线性的&lt;/strong&gt;，不能用简单的张量缩并表示。我们将其定义为函数 $A = \text{softmax}(S^{\prime})$：
+&lt;code&gt;attn_weights = torch.softmax(...)&lt;/code&gt;。这一步是&lt;strong&gt;非线性的&lt;/strong&gt;，不能用简单的张量缩并表示。我们将其定义为函数 $A = \text{softmax}(S&#39;)$：
 $$S&#39;_{t_1 t_2} = S_{t_1 t_2} / \sqrt{d_{out}}$$
-$$A_{t_1 t_2} = \frac{\exp(S^{\prime}_{t_1 t_2})}{\mathbf{1}_{t_2^{\prime}} \exp(S^{\prime}_{t_1 t_2^{\prime}})}$$
+$$A_{t_1 t_2} = \frac{\exp(S&#39;_{t_1 t_2})}{\mathbf{1}_{t_2&#39;} \exp(S&#39;_{t_1 t_2&#39;})}$$
 $A_{t_1 t_2}$ 是最终的注意力权重矩阵。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;&lt;code&gt;context_vecs&lt;/code&gt; 的计算 (线性)&lt;/strong&gt;
 &lt;code&gt;context_vecs = torch.matmul(attn_weights, v)&lt;/code&gt;。这是注意力权重 $A$ 和值 $V$ 之间的矩阵乘法。它在 $t_2$ 维度（序列）上进行缩并：
@@ -372,7 +394,8 @@ $$\frac{\partial L}{\partial S_{t_1 t_2}} = \frac{A_{t_1 t_2}}{\sqrt{d_{out}}} \
 &lt;/blockquote&gt;
 &lt;p&gt;而 $\frac{\partial L}{\partial A_{t_1 t_2}}$ (即 $G^A$) 定义为：&lt;/p&gt;
 $$\frac{\partial L}{\partial A_{t_1 t_2}} = \frac{\partial L}{\partial Y_{t_1 j}} V_{t_2 j}$$
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;h2 id=&#34;代码验证&#34;&gt;代码验证
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;  1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  2
@@ -503,11 +526,9 @@ $$\frac{\partial L}{\partial A_{t_1 t_2}} = \frac{\partial L}{\partial Y_{t_1 j}
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;127
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;128
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;129
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;130
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;torch&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;torch&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;torch.nn&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;nn&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;torch.testing&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# 导入测试库&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# ---------------------------------------------------------------------------&lt;/span&gt;
