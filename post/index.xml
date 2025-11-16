@@ -207,7 +207,7 @@ $$Y_{t_1 j} = A_{t_1 t_2} (X_{t_2 k} W^V_{jk})$$&lt;/li&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;应用链式法则：&lt;/p&gt;
-&lt;p&gt;我们想求 $\frac{\partial L}{\partial S_{t_1 t_2}}$ (一个特定的 $S$ 元素)。$S_{t_1 t_2}$ 通过 $S&amp;rsquo;&lt;em&gt;{t_1 t_2}$ 影响第 $t_1$ 行的所有 $A$ 元素（即 $A&lt;/em&gt;{t_1 t_2&amp;rsquo;}$，其中 $t_2&amp;rsquo;$ 是该行的任一列）。&lt;/p&gt;
+&lt;p&gt;我们想求$\frac{\partial L}{\partial S_{t_1 t_2}}$(一个特定的$S$元素)。$S_{t_1 t_2}$通过$S&amp;rsquo;&lt;em&gt;{t_1 t_2}$影响第$t_1$行的所有$A$元素（即$A&lt;/em&gt;{t_1 t_2&amp;rsquo;}$，其中$t_2&amp;rsquo;$是该行的任一列）。&lt;/p&gt;
 &lt;p&gt;$$G^S_{t_1 t_2} = \frac{\partial L}{\partial S_{t_1 t_2}} = \sum_{t_2&amp;rsquo;} \frac{\partial L}{\partial A_{t_1 t_2&amp;rsquo;}} \frac{\partial A_{t_1 t_2&amp;rsquo;}}{\partial S_{t_1 t_2}}$$&lt;/p&gt;
 &lt;p&gt;(注意：Softmax 是逐行应用的，所以 $S_{t_1 t_2}$ 只影响 $A_{t_1 :}$，这就是为什么求和中没有 $t_1&amp;rsquo;$。)&lt;/p&gt;
 &lt;/li&gt;
