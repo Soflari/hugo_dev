@@ -16,23 +16,24 @@
         <description>&lt;p&gt;在探索使用hugo建立博客的过程中，遇到了数学公式难以渲染的问题。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;如何配置hugo的数学环境&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.1zh.tech/posts/hugo-papermod-math/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;如何在 Hugo 中使用数学公式？&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;tips:&lt;/strong&gt; KaTex 中的行内公式也是支持使用&lt;code&gt;$inline_equation$&lt;/code&gt;的&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;如何配置hugo的数学环境&lt;/strong&gt;&lt;br&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://www.1zh.tech/posts/hugo-papermod-math/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;如何在 Hugo 中使用数学公式？&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;tips:&lt;/strong&gt; KaTex 中的行内公式也是支持使用&lt;code&gt;$inline_equation$&lt;/code&gt;的&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Markdown下的Tex渲染失败解决&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog2.pillar.fun/p/markdown%E4%B8%8B%E7%9A%84tex%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E8%A7%A3%E5%86%B3/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;p&gt;&lt;strong&gt;Markdown下的Tex渲染失败解决&lt;/strong&gt;&lt;br&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://blog2.pillar.fun/p/markdown%E4%B8%8B%E7%9A%84tex%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E8%A7%A3%E5%86%B3/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Markdown下的Tex渲染失败解决&lt;/a&gt;&lt;br&gt;
 hugo网页渲染是网站和公式两个渲染引擎同时作用的，所以要设置优先级，让公式优先被公式引擎渲染。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;KaTex常用数学公式&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://kissingfire123.github.io/2022/02/18_%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8Fkatex%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/#%E9%9B%B6-%E5%89%8D%E8%A8%80&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;p&gt;&lt;strong&gt;KaTex常用数学公式&lt;/strong&gt;&lt;br&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://kissingfire123.github.io/2022/02/18_%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8Fkatex%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/#%E9%9B%B6-%E5%89%8D%E8%A8%80&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;常用数学公式排版KaTex语法总结&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+&lt;p&gt;修改完之后需要多等待几秒，网页刷新较慢。多在本地提交修改，最终再上传至仓库。&lt;/p&gt;
 </description>
         </item>
         <item>
