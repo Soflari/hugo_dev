@@ -76,71 +76,67 @@
 &lt;/div&gt;&lt;h2 id=&#34;神经网络的结构&#34;&gt;神经网络的结构
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;code&gt;nn.Flatten()&lt;/code&gt;&lt;br&gt;
-这个函数将输入张量的各维度展平成一个向量。默认从索引1开始到索引-1结束，要注意的是索引是从0开始的，所以索引1其实是指的第2个。&lt;br&gt;
-这里的输入X维度为$[1,28,28]$，经过&lt;code&gt;nn.Flatten()&lt;/code&gt;后应该是$[1,28*28]$。&lt;br&gt;
+&lt;p&gt;&lt;code&gt;nn.Flatten()&lt;/code&gt;
+这个函数将输入张量的各维度展平成一个向量。默认从索引1开始到索引-1结束，要注意的是索引是从0开始的，所以索引1其实是指的第2个。
+这里的输入X维度为$[1,28,28]$，经过&lt;code&gt;nn.Flatten()&lt;/code&gt;后应该是$[1,28*28]$。
 从张量角度看，
 &lt;/p&gt;
 $$
-    x_{b1ij}=x_{bn}, \quad n=0*28*28+i*28+j
-    $$
+x_{b1ij}=x_{bn}, \quad n=0*28*28+i*28+j
+$$
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;code&gt;linear_relu_stack&lt;/code&gt;&lt;br&gt;
+&lt;p&gt;&lt;code&gt;linear_relu_stack&lt;/code&gt;
 这个函数将一系列的神经层排成一个列表，数据将从这些层中流出。过程中会改变维度。&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;code&gt;Linear(28*28, 512)&lt;/code&gt;&lt;br&gt;
+&lt;li&gt;&lt;code&gt;Linear(28*28, 512)&lt;/code&gt;
 张量表示: $y_{bm}=x_{bn}w_{nm}+\mathbf{1}_{b}b_{m}$&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ReLU&lt;/code&gt;&lt;br&gt;
+&lt;li&gt;&lt;code&gt;ReLU&lt;/code&gt;
 张量表示: $y_{bm}^{r}=\text{ReLU}(y_{bm})$&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Linear(512,512)&lt;/code&gt;&lt;br&gt;
+&lt;li&gt;&lt;code&gt;Linear(512,512)&lt;/code&gt;
 张量表示: $y_{bm&#39;}&#39;=y_{bm}^{r}w_{mm&#39;}+\mathbf{1}_{b}b_{m&#39;}$&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ReLU&lt;/code&gt;&lt;br&gt;
+&lt;li&gt;&lt;code&gt;ReLU&lt;/code&gt;
 张量表示: $y_{bm&#39;}^{r}=\text{ReLU}(y_{bm&#39;})$&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Linear(512,10)&lt;/code&gt;&lt;br&gt;
+&lt;li&gt;&lt;code&gt;Linear(512,10)&lt;/code&gt;
 张量表示: $y_{bo}=y_{bm&#39;}^{r}w_{m&#39;o}+\mathbf{1}_{b}b_{o}$&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;code&gt;Softmax(dim=1)&lt;/code&gt;&lt;br&gt;
-张量表示：&lt;br&gt;
+&lt;p&gt;&lt;code&gt;Softmax(dim=1)&lt;/code&gt;
+张量表示：
 &lt;/p&gt;
 $$s_{bi}= \frac{e^{x_{bi}}}{\mathbf{1}_{kj}e^{x_{kj}}}$$
-&lt;p&gt;
-4. 交叉熵损失
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;交叉熵损失
 &lt;/p&gt;
 $$
-    c_{b}=-\log{s_{b\text{T}}}
-    $$
+c_{b}=-\log{s_{b\text{T}}}
+$$
 &lt;p&gt;
 交叉熵损失是单分类损失函数，这里的$\text{T}$是代表真实标签的常量索引，这里的$\text{T}$不是一种哑指标。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;推导梯度&#34;&gt;推导梯度
-&lt;/h2&gt;&lt;p&gt;重点是利用反向传播，也就是由终点向起点一层层推。&lt;/p&gt;
+&lt;/h2&gt;&lt;h3 id=&#34;交叉熵部分梯度&#34;&gt;交叉熵部分梯度
+&lt;/h3&gt;&lt;p&gt;重点是利用反向传播，也就是由终点向起点一层层推。&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;$c_{b}$
-&lt;/p&gt;
+&lt;li&gt;$c_{b}$
 $$
-    \frac{\partial c_{b}}{\partial s_{ki}}=-\frac{\partial \log s_{b\text{T}}}{\partial s_{ki}}
-    =-\frac{1}{s_{k\text{T}}}\delta_{i\text{T}}
-    $$
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;$s_{bi}$
-&lt;/p&gt;
+\frac{\partial c_{b}}{\partial s_{ki}}=-\frac{\partial \log s_{b\text{T}}}{\partial s_{ki}}
+=-\frac{1}{s_{k\text{T}}}\delta_{i\text{T}}
+$$&lt;/li&gt;
+&lt;li&gt;$s_{bi}$
 $$
-    \frac{\partial s_{bi}}{\partial y_{ko}}
-    =\frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
-    $$
-&lt;p&gt;
-令$\sigma=\mathbf{1}_{kj}e^{x_{kj}}$,&lt;/p&gt;
+\frac{\partial s_{bi}}{\partial y_{ko}}
+=\frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
 $$
-    \frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
-    =\frac{\partial\sigma}{\partial y_{ko}}
-    =\frac{1}{\sigma^2}( \frac{\partial e^{y_{bi}}}{\partial y_{ko}}\sigma-e^{y_{bi}}\frac{\partial \sigma}{\partial y_{ko}})
-    $$
+令$\sigma=\mathbf{1}_{kj}e^{x_{kj}}$,
+$$
+\frac{\partial \mathbf{1}_{kj}e^{x_{kj}}}{\partial y_{ko}}
+=\frac{\partial\sigma}{\partial y_{ko}}
+=\frac{1}{\sigma^2}( \frac{\partial e^{y_{bi}}}{\partial y_{ko}}\sigma-e^{y_{bi}}\frac{\partial \sigma}{\partial y_{ko}})
+$$
 &lt;ol&gt;
 &lt;li&gt;$\frac{\partial e^{y_{bi}}}{\partial y_{ko}}$
 $$\frac{\partial e^{y_{bi}}}{\partial y_{ko}}
@@ -149,32 +145,91 @@ $$\frac{\partial e^{y_{bi}}}{\partial y_{ko}}
 &lt;li&gt;$\frac{\partial \sigma}{\partial y_{ko}}$
 $$\frac{\partial \sigma}{\partial y_{ko}}=\frac{\partial \mathbf{1}_{bj}e^{y_{bj}}}{\partial y_{ko}}
 	=\mathbf{1}_{bj}e^{y_{bj}}\delta_{bk}\delta_{jo}=\mathbf{1}_{ko}e^{y_{ko}}
-	=e^{y_{ko}} $$&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;代入原式：
-&lt;/p&gt;
+	=e^{y_{ko}} $$
+代入原式：
 $$
 \frac{1}{\sigma^2}( \frac{\partial e^{y_{bi}}}{\partial y_{ko}}\sigma-e^{y_{bi}}\frac{\partial \sigma}{\partial y_{ko}})
 =\frac{1}{\sigma^2}( e^{y_{bi}}\delta_{bk}\delta_{io}\sigma-e^{y_{bi}}e^{y_{ko}})
 =s_{bi}\delta_{bk}\delta_{io}-s_{bi}s_{ko}
 $$
-&lt;p&gt;
 即
-&lt;/p&gt;
 $$\frac{\partial s_{bi}}{\partial y_{ko}}
 =s_{bi}\delta_{bk}\delta_{io}-s_{bi}s_{ko}$$
-&lt;p&gt;
-综合一下，现在就有&lt;/p&gt;
+综合一下，现在就有
 $$
 \frac{\partial c_{b}}{\partial y_{ko}}
 =\frac{\partial c_{b}}{\partial s_{ki}}\frac{\partial s_{bi}}{\partial y_{ko}}
 =-\frac{1}{s_{k\text{T}}}\delta_{i\text{T}}(s_{bi}\delta_{bk}\delta_{io}-s_{bi}s_{ko})
 =s_{ko}-\delta_{bk}\delta_{To}
 $$
-&lt;p&gt;&lt;br&gt;
-这里可以看出，交叉熵损失在最后一层的梯度，恰好等于第$k$个样本的第$o$个logits(概率值)减去第$k$个样本的第$\text{T}$个标签(也就是1).&lt;/p&gt;
+这里可以看出，交叉熵损失在最后一层的梯度，恰好等于第$k$个样本的第$o$个logits(概率值)减去第$k$个样本的第$\text{T}$个标签(也就是1).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;单个线性层梯度&#34;&gt;单个线性层梯度
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;输入 $X$: (∗, in_features)&lt;/li&gt;
+&lt;li&gt;权重 $A$ : (out_features,in_features)&lt;/li&gt;
+&lt;li&gt;偏置 $b$: (out_features)&lt;/li&gt;
+&lt;li&gt;输出 $Y$: (∗, out_features)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;PyTorch对线性层的定义：
+&lt;/p&gt;
+$$
+Y=XA^{T}+b
+$$
+&lt;p&gt;令 $C=A^{T}$ ，就有张量表示：
+&lt;/p&gt;
+$$
+y_{ij}=x_{ik}c_{kj}+\mathbf{1}_{i}b_{j}
+$$
+&lt;p&gt;
+上式中，$k$ 重复出现代表做了乘积，同时在等式左侧未出现，就还做了求和。$\mathbf{1}_{i}$ 用于将 $b_{j}$ 广播成矩阵。&lt;/p&gt;
+&lt;p&gt;根据&lt;a class=&#34;link&#34; href=&#34;https://robotchinwag.com/posts/linear-layer-deriving-the-gradient-for-the-backward-pass/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;# Linear Layer, Deriving the Gradient for the Backward Pass&lt;/a&gt;的结果，我们有如下结论：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;对 $X$ 的梯度
+$$\frac{\partial y_{ij}}{\partial x_{pq}}=\delta_{ip}c_{qj}$$&lt;/li&gt;
+&lt;/ol&gt;
+$$\begin{aligned}
+\frac{\partial l}{\partial x_{pq}} &amp; =\frac{\partial l}{\partial y_{ij}}\frac{\partial y_{ij}}{\partial x_{pq}} \\
+ &amp; =\frac{\partial l}{\partial y_{ij}}\delta_{ip}c_{qj} \\
+ &amp; =\frac{\partial l}{\partial y_{pj}}c_{qj}
+\end{aligned}$$
+&lt;p&gt;
+2. 对 $A$ 的梯度
+&lt;/p&gt;
+$$\begin{aligned}
+	\frac{\partial y_{ij}}{\partial a_{pq}} &amp; =\frac{\partial}{\partial a_{pq}}[x_{ik}c_{kj}+\mathbf{1}_ib_j] \\
+	 &amp; =x_{ik}\frac{\partial c_{kj}}{\partial a_{pq}}
+	\end{aligned}$$
+&lt;p&gt;
+由于 $C=A^{T}$， 所以有 $c_{kj}=a_{jk}$ 。继续有公式：
+&lt;/p&gt;
+$$\begin{aligned}
+	\frac{\partial y_{ij}}{\partial a_{pq}} &amp; =x_{ik}\frac{\partial a_{jk}}{\partial a_{pq}} \\
+	 &amp; =x_{ik}\delta_{jp}\delta_{kq} \\
+	 &amp; =x_{iq}\delta_{jp}
+	\end{aligned}$$
+$$\begin{aligned}
+	\frac{\partial l}{\partial a_{pq}} &amp; =\frac{\partial l}{\partial y_{ij}}\frac{\partial y_{ij}}{\partial a_{pq}} \\
+	 &amp; =\frac{\partial l}{\partial y_{ij}}x_{iq}\delta_{jp} \\
+	 &amp; =\frac{\partial l}{\partial y_{ip}}x_{iq}
+	\end{aligned}$$
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;对 $b$ 的梯度
+$$\begin{aligned}
+	\frac{\partial y_{ij}}{\partial b_p} &amp; =\frac{\partial}{\partial b_p}[x_{ik}c_{kj}+\mathbf{1}_ib_j] \\
+	&amp; =\frac{\partial\left(\mathbf{1}_ib_j\right)}{\partial b_p} \\
+	&amp; =1_i\frac{\partial b_j}{\partial b_p}
+	\end{aligned}$$
+$$\frac{\partial y_{ij}}{\partial b_p}=\mathbf{1}_i\delta_{jp}$$
+$$\begin{aligned}
+	\frac{\partial l}{\partial b_p} &amp; =\frac{\partial l}{\partial y_{ij}}\frac{\partial y_{ij}}{\partial b_p} \\
+	 &amp; =\frac{\partial l}{\partial y_{ij}}\mathbf{1}_i\delta_{jp} \\
+	 &amp; =\frac{\partial l}{\partial y_{ip}}\mathbf{1}_i
+	\end{aligned}$$&lt;/li&gt;
+&lt;/ol&gt;
 </description>
         </item>
         <item>
