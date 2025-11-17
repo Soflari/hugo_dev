@@ -7,7 +7,219 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Soflari</copyright>
-        <lastBuildDate>Mon, 17 Nov 2025 01:43:46 +0800</lastBuildDate><atom:link href="http://localhost:1313/hugo_dev/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 17 Nov 2025 14:19:08 +0800</lastBuildDate><atom:link href="http://localhost:1313/hugo_dev/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>卷积模块的张量表示及梯度推导</title>
+        <link>http://localhost:1313/hugo_dev/p/%E5%8D%B7%E7%A7%AF%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/</link>
+        <pubDate>Mon, 17 Nov 2025 14:19:08 +0800</pubDate>
+        
+        <guid>http://localhost:1313/hugo_dev/p/%E5%8D%B7%E7%A7%AF%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/</guid>
+        <description>&lt;h2 id=&#34;一维卷积&#34;&gt;一维卷积
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Pytorch的定义&lt;/strong&gt;
+&lt;img src=&#34;http://localhost:1313/hugo_dev/hugo_dev/p/%E5%8D%B7%E7%A7%AF%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/pics/Pasted_image_20251113124916.png&#34;
+	width=&#34;1110&#34;
+	height=&#34;557&#34;
+	srcset=&#34;http://localhost:1313/hugo_dev/hugo_dev/p/%E5%8D%B7%E7%A7%AF%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/pics/Pasted_image_20251113124916_hu15768630928441355763.png 480w, http://localhost:1313/hugo_dev/hugo_dev/p/%E5%8D%B7%E7%A7%AF%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/pics/Pasted_image_20251113124916_hu10844074300712331657.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Pytorch卷积定义&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;199&#34;
+		data-flex-basis=&#34;478px&#34;
+	
+&gt;&lt;/p&gt;
+$$\operatorname{out}(N_i,C_{\operatorname{out}_j})=\operatorname{bias}(C_{\operatorname{out}_j})+\sum_{k=0}^{C_{in}-1}\operatorname{weight}(C_{\operatorname{out}_j},k)\star\operatorname{input}(N_i,k)$$
+&lt;p&gt;
+写成数学形式：
+&lt;/p&gt;
+$$
+y_{ni}=\sum_jv_{n(i+j)}w_{nj}
+$$
+&lt;p&gt;
+偏置被放进求和号作为输入和卷积核的一部分。
+将批次忽略，也就是只看某个样本卷积操作的公式就有：
+&lt;/p&gt;
+$$
+y_i=\sum_jv_{i+j}w_j
+$$
+&lt;p&gt;&lt;strong&gt;定义张量和索引：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$n$: Batch (批次) 索引 (对应 $N_i$)&lt;/li&gt;
+&lt;li&gt;$j$: 输出通道索引 (对应 $C_{out, j}$)&lt;/li&gt;
+&lt;li&gt;$k$: 输入通道索引 (对应 $k$)&lt;/li&gt;
+&lt;li&gt;$i$: 输出&lt;strong&gt;空间&lt;/strong&gt;索引 (对应 $i_{\bar{y}}$)&lt;/li&gt;
+&lt;li&gt;$l$: 输入&lt;strong&gt;空间&lt;/strong&gt;索引 (对应 $l_{\bar{x}}$)&lt;/li&gt;
+&lt;li&gt;$p$: 核 (kernel) &lt;strong&gt;空间&lt;/strong&gt;索引 (对应 $j_{\bar{k}}$)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;现在定义参与运算的张量：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;输出 $O$:&lt;/strong&gt; $O_{nji}$ (Batch, Out-Channel, Out-Spatial)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;输入 $I$:&lt;/strong&gt; $I_{nkl}$ (Batch, In-Channel, In-Spatial)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;权重 $W$:&lt;/strong&gt; $W_{jkp}$ (Out-Channel, In-Channel, Kernel-Spatial)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;偏差 $B$:&lt;/strong&gt; $B_{j}$ (Out-Channel)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;卷积张量 $C$:&lt;/strong&gt; $C_{ilp}$ (Out-Spatial, In-Spatial, Kernel-Spatial)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;定义卷积张量 $C$ :&lt;/strong&gt;
+这个 $C$ 张量定义了卷积操作本身
+&lt;/p&gt;
+$$C_{ijl}=
+\begin{cases}
+1, &amp; \mathrm{if} \quad l=i+j \\
+0, &amp; \mathrm{else} &amp; 
+\end{cases}$$
+&lt;p&gt;
+卷积操作的张量计算公式：
+&lt;/p&gt;
+$$y_i=C_{ijl}v_lw_j$$
+&lt;p&gt;
+这里的 $v$ 表示输入数据，下标 $l$ 表示 $v$ 的第 $l$ 个分量。$w_{j}$ 表示卷积核的第 $j$ 个分量。$C_{ijl}$ 则表示卷积操作，将约束条件带入上式，就可得到
+&lt;/p&gt;
+$$
+y_i=v_{i+j}w_j
+$$
+&lt;p&gt;
+扩&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;加入步幅 $s$ 和膨胀 $d$ ：&lt;/strong&gt;
+此时卷积操作加入了步幅长度 $s$ 和膨胀大小 $d$ ：
+&lt;/p&gt;
+$$C_{ilp} = \begin{cases} 1, &amp; \text{if } l = s \cdot i + d \cdot p \\ 0, &amp; \text{else} \end{cases}$$
+&lt;p&gt;
+让我们通过一个简单的例子（$d=1, s=2$ vs $s=1, d=2$）来理解。
+&lt;strong&gt;Stride (步幅) 的效果: $s=2, d=1$&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;公式变为：&lt;/strong&gt; $l = 2 \cdot i + j$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;它在做什么：&lt;/strong&gt; 缩放&lt;strong&gt;输出索引 $i$&lt;/strong&gt;。索引 $i$ 代表你正在计算&lt;strong&gt;第几个&lt;/strong&gt;输出点。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;我们来计算几个输出点：&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;计算 $y_0$ (即 $i=0$):&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;关系是 $l = 2 \cdot 0 + j = j$。&lt;/li&gt;
+&lt;li&gt;$y_0 = \sum_j v_{j} \cdot w_j = v_0w_0 + v_1w_1 + v_2w_2 + \dots$&lt;/li&gt;
+&lt;li&gt;（核从输入的第 0 个位置开始）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;计算 $y_1$ (即 $i=1$):&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;关系是 $l = 2 \cdot 1 + j = 2 + j$。&lt;/li&gt;
+&lt;li&gt;$y_1 = \sum_j v_{2+j} \cdot w_j = v_2w_0 + v_3w_1 + v_4w_2 + \dots$&lt;/li&gt;
+&lt;li&gt;（核从输入的第 2 个位置开始）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;计算 $y_2$ (即 $i=2$):&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;关系是 $l = 2 \cdot 2 + j = 4 + j$。&lt;/li&gt;
+&lt;li&gt;$y_2 = \sum_j v_{4+j} \cdot w_j = v_4w_0 + v_5w_1 + v_6w_2 + \dots$&lt;/li&gt;
+&lt;li&gt;（核从输入的第 4 个位置开始）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;结论 (Stride):&lt;/strong&gt;
+请注意：从计算 $y_0$ 变到 $y_1$，你的核在输入 $v$ 上滑动（或“跳跃”）了 2 个位置（从 0 到 2）。你跳过了本应在 $s=1$ 时计算的那个输出点。
+Stride 导致你计算的输出点 $y_i$ 的总数变少了。这就是缩放（下采样）效果的来源。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Dilation (扩张) 的效果: $s=1, d=2$&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;公式变为：&lt;/strong&gt; $l = i + 2 \cdot j$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;它在做什么：&lt;/strong&gt; 缩放&lt;strong&gt;核索引 $j$&lt;/strong&gt;。索引 $j$ 代表核 $w$ 内部的&lt;strong&gt;第几个&lt;/strong&gt;权重。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;我们来计算几个输出点：&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;计算 $y_0$ (即 $i=0$):&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;关系是 $l = 0 + 2 \cdot j = 2j$。&lt;/li&gt;
+&lt;li&gt;$y_0 = \sum_j v_{2j} \cdot w_j = v_0w_0 + v_2w_1 + v_4w_2 + \dots$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;计算 $y_1$ (即 $i=1$):&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;关系是 $l = 1 + 2 \cdot j = 1 + 2j$。&lt;/li&gt;
+&lt;li&gt;$y_1 = \sum_j v_{1+2j} \cdot w_j = v_1w_0 + v_3w_1 + v_5w_2 + \dots$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;计算 $y_2$ (即 $i=2$):&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;关系是 $l = 2 + 2 \cdot j = 2 + 2j$。&lt;/li&gt;
+&lt;li&gt;$y_2 = \sum_j v_{2+2j} \cdot w_j = v_2w_0 + v_4w_1 + v_6w_2 + \dots$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;结论 (Dilation):
+请注意：我们没有跳过任何输出点（我们计算了 $y_0, y_1, y_2, \dots$）。
+相反，为了计算单个输出点（比如 $y_0$），你的核 $w$ 的权重 ($w_0, w_1, w_2$) 被应用到了间隔更开的输入点 ($v_0, v_2, v_4$) 上。
+Dilation 并没有减少输出点的数量，而是增大了单个核的感受野 (receptive field)。核被‘撑大’了，中间有了‘空洞’。这就是扩张的含义。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;二维卷积&#34;&gt;二维卷积
+&lt;/h2&gt;&lt;p&gt;为简化表示，我们做如下索引替换：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;输出索引为 $(a, b)$&lt;/li&gt;
+&lt;li&gt;核索引为 $(c, d)$&lt;/li&gt;
+&lt;li&gt;输入索引为 $(e, f)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;定义张量：&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;令输出张量为 $y$，其分量为 $y_{ab}$。&lt;/li&gt;
+&lt;li&gt;令输入张量为 $v$，其分量为 $v_{ef}$。&lt;/li&gt;
+&lt;li&gt;令核张量为 $w$，其分量为 $w_{cd}$。&lt;/li&gt;
+&lt;li&gt;令 $(\star 2D)$ 卷积张量为 $C$，其分量为 $C_{abcdef}$。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;张量缩并（爱因斯坦求和形式）：&lt;/strong&gt;
+完整的 2D 卷积操作（类似于 1D 情况）可以写为：
+$$y_{ab} = \sum_{c,d} \sum_{e,f} C_{abcdef} \cdot v_{ef} \cdot w_{cd}$$
+使用爱因斯坦求和约定（省略 $\sum$ 符号），我们得到一个非常简洁的张量形式：
+$$y_{ab} = C_{abcdef} v_{ef} w_{cd}$$
+&lt;ul&gt;
+&lt;li&gt;$a, b$ 是&lt;strong&gt;自由索引&lt;/strong&gt;，代表输出张量的维度。&lt;/li&gt;
+&lt;li&gt;$c, d, e, f$ 是&lt;strong&gt;哑索引（缩并索引）&lt;/strong&gt;，因为它们在右侧重复出现，表示需要对它们的所有可能值求和。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;六阶卷积张量 $C$ 的定义：&lt;/strong&gt;
+这个六阶张量 $C_{abcdef}$ 的定义即是图像中 $(\star 2D)$ 的定义：
+$$C_{abcdef} = \begin{cases} 1, &amp; \text{if } (e, f) = (a, b) + (c, d) \\ 0, &amp; \text{else} \end{cases}$$
+这等价于两个独立的条件必须同时满足：
+&lt;ul&gt;
+&lt;li&gt;$e = a + c$&lt;/li&gt;
+&lt;li&gt;$f = b + d$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;验证&lt;/strong&gt;
+这种形式再次等价于标准的 2D 卷积。如果我们从 $y_{ab} = \sum_{c,d} \sum_{e,f} C_{abcdef} v_{ef} w_{cd}$ 开始：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;对 $e, f$ 求和：由于 $C_{abcdef}$ 仅在 $e=a+c$ 和 $f=b+d$ 时为 1，$\sum_{e,f} C_{abcdef} v_{ef}$ 这一项塌缩为 $v_{a+c, b+d}$。&lt;/li&gt;
+&lt;li&gt;代回结果：$y_{ab} = \sum_{c,d} v_{a+c, b+d} \cdot w_{cd}$。&lt;/li&gt;
+&lt;li&gt;这正是 2D 卷积的标准定义（将 $(a,b)$ 视为输出坐标，$(c,d)$ 视为核坐标）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;加入步幅和膨胀&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;步幅 (Stride):&lt;/strong&gt; $s = (s_0, s_1)$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;扩张 (Dilation):&lt;/strong&gt; $d = (d_0, d_1)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;张量缩并 (爱因斯坦求和形式):&lt;/strong&gt;
+整个 2D 卷积操作（包含通道）可以写为：
+$$y_{ab} = C_{abcdef} v_{ef} w_{cd}$$
+&lt;ul&gt;
+&lt;li&gt;$a, b$ 是&lt;strong&gt;自由索引&lt;/strong&gt;，定义了我们正在计算的输出张量的分量。&lt;/li&gt;
+&lt;li&gt;$c, d, e, f$ 是&lt;strong&gt;哑索引&lt;/strong&gt;，表示我们需要对这些索引的所有可能值求和。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;六阶卷积张量 $C$ 的定义:&lt;/strong&gt;
+这个六阶张量 $C$ 包含了所有关于步幅和扩张的&lt;strong&gt;结构信息&lt;/strong&gt;。其分量 $C_{abcdef}$ 定义如下：
+$$C_{abcdef} = \begin{cases} 1, &amp; \text{if } (e = s_0 \cdot a + d_0 \cdot c) \quad \textbf{and} \quad (f = s_1 \cdot b + d_1 \cdot d) \\ 0, &amp; \text{else} \end{cases}$$
+这个定义非常清晰地展示了 $s$ 和 $d$ 是如何分别作用于不同维度的：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;$s_0, d_0$ 掌控着第 0 维 (索引 $a, c, e$) 的映射关系。&lt;/li&gt;
+&lt;li&gt;$s_1, d_1$ 掌控着第 1 维 (索引 $b, d, f$) 的映射关系。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>MLP的张量表示及梯度推导</title>
         <link>http://localhost:1313/hugo_dev/p/mlp%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/</link>
         <pubDate>Mon, 17 Nov 2025 01:43:46 +0800</pubDate>
@@ -211,12 +423,11 @@ $$\begin{aligned}
 	 &amp; =x_{ik}\delta_{jp}\delta_{kq} \\
 	 &amp; =x_{iq}\delta_{jp}
 	\end{aligned}$$
-&lt;pre&gt;&lt;code&gt;$$\begin{aligned}
-\frac{\partial l}{\partial a_{pq}} &amp;amp; =\frac{\partial l}{\partial y_{ij}}\frac{\partial y_{ij}}{\partial a_{pq}} \\
- &amp;amp; =\frac{\partial l}{\partial y_{ij}}x_{iq}\delta_{jp} \\
- &amp;amp; =\frac{\partial l}{\partial y_{ip}}x_{iq}
-\end{aligned}$$
-&lt;/code&gt;&lt;/pre&gt;
+$$\begin{aligned}
+	\frac{\partial l}{\partial a_{pq}} &amp; =\frac{\partial l}{\partial y_{ij}}\frac{\partial y_{ij}}{\partial a_{pq}} \\
+	 &amp; =\frac{\partial l}{\partial y_{ij}}x_{iq}\delta_{jp} \\
+	 &amp; =\frac{\partial l}{\partial y_{ip}}x_{iq}
+	\end{aligned}$$
 &lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;对 $b$ 的梯度
 $$\begin{aligned}
