@@ -566,13 +566,8 @@ $$Y_{t_1 j} = A_{t_1 t_2} (X_{t_2 k} W^V_{jk})$$&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;最终的输出 $Y_{t_1 j}$ 是&lt;strong&gt;所有 $t_2$ 位置的值&lt;/strong&gt;（经过 $W^V$ 变换后）的&lt;strong&gt;动态加权和&lt;/strong&gt;，权重 $A_{t_1 t_2}$ 是根据查询和键（$X$ 和 $W^Q, W^K$）动态计算出来的。&lt;/p&gt;
 &lt;h2 id=&#34;梯度推导&#34;&gt;梯度推导
-&lt;/h2&gt;&lt;p&gt;好的，您要求提供一个完整的推导，并且&lt;strong&gt;不省略 $G^S$（即 $\frac{\partial L}{\partial S}$）的推导&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;这非常关键，因为 $A \rightarrow S$ 这一步是反向传播（backpropagation）通过 Softmax 函数，是整个过程中最复杂的部分。&lt;/p&gt;
-&lt;p&gt;下面是完整的、包含所有步骤的推导。&lt;/p&gt;
-&lt;h3 id=&#34;引言和符号定义&#34;&gt;引言和符号定义
-&lt;/h3&gt;&lt;p&gt;我们将遵循您的爱因斯坦求和约定（重复的索引表示在该维度上求和）。&lt;/p&gt;
-&lt;p&gt;已知（上游梯度）：&lt;/p&gt;
-&lt;p&gt;我们假设我们已经拥有了损失 $L$ 相对于注意力层最终输出 $Y$ 的梯度。我们将其定义为 $G^Y$：&lt;/p&gt;
+&lt;/h2&gt;&lt;h3 id=&#34;引言和符号定义&#34;&gt;引言和符号定义
+&lt;/h3&gt;&lt;p&gt;我们假设我们已经拥有了损失 $L$ 相对于注意力层最终输出 $Y$ 的梯度。我们将其定义为 $G^Y$：&lt;/p&gt;
 $$G^Y_{t_1 j} = \frac{\partial L}{\partial Y_{t_1 j}}$$
 &lt;p&gt;目标：&lt;/p&gt;
 &lt;p&gt;我们希望求解以下三个梯度：&lt;/p&gt;
@@ -648,7 +643,6 @@ $$G^A_{t_1 t_2} = \frac{\partial L}{\partial A_{t_1 t_2}} = \sum_{t_1&#39;} \sum
 &lt;li&gt;
 &lt;p&gt;代回（并使用爱因斯坦约定）：&lt;/p&gt;
 $$G^A_{t_1 t_2} = G^Y_{t_1 j} V_{t_2 j}$$
-&lt;p&gt;（这是我们上一个回答的结论，现在它将作为 $G^S$ 推导的起点。）&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;步骤 2.2：计算 $\frac{\partial L}{\partial S}$ (即 $G^S$)&lt;/strong&gt;&lt;/p&gt;
