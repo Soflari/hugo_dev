@@ -512,8 +512,8 @@ y_{ij}=x_{ik}c_{kj}+\mathbf{1}_{i}b_{j}
 $$
 <p>
 上式中，$k$ 重复出现代表做了乘积，同时在等式左侧未出现，就还做了求和。$\mathbf{1}_{i}$ 用于将 $b_{j}$ 广播成矩阵。</p>
-<p>根据<a class="link" href="https://robotchinwag.com/posts/linear-layer-deriving-the-gradient-for-the-backward-pass/"  target="_blank" rel="noopener"
-    ># Linear Layer, Deriving the Gradient for the Backward Pass</a>的结果，我们有如下结论：</p>
+<p>根据 <a class="link" href="https://robotchinwag.com/posts/linear-layer-deriving-the-gradient-for-the-backward-pass/"  target="_blank" rel="noopener"
+    >Linear Layer, Deriving the Gradient for the Backward Pass</a> 的结果，我们有如下结论：</p>
 <ol>
 <li>对 $X$ 的梯度
 $$\frac{\partial y_{ij}}{\partial x_{pq}}=\delta_{ip}c_{qj}$$</li>
