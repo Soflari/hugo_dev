@@ -170,11 +170,68 @@ Stride 导致你计算的输出点 $y_i$ 的总数变少了。这就是缩放（
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;结论 (Dilation):
+&lt;li&gt;&lt;strong&gt;结论 (Dilation):&lt;/strong&gt;
 请注意：我们没有跳过任何输出点（我们计算了 $y_0, y_1, y_2, \dots$）。
 相反，为了计算单个输出点（比如 $y_0$），你的核 $w$ 的权重 ($w_0, w_1, w_2$) 被应用到了间隔更开的输入点 ($v_0, v_2, v_4$) 上。
 Dilation 并没有减少输出点的数量，而是增大了单个核的感受野 (receptive field)。核被‘撑大’了，中间有了‘空洞’。这就是扩张的含义。&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;一维卷积的梯度推导&#34;&gt;一维卷积的梯度推导
+&lt;/h2&gt;&lt;p&gt;前向公式：
+&lt;/p&gt;
+$$
+y_i=C_{ijl}v_lw_j
+$$
+&lt;p&gt;
+卷积算子 $C_{ijl}$ 有定义,
+&lt;/p&gt;
+$$C_{ijl}=
+\begin{cases}
+1, &amp; \mathrm{if}\quad l=i+j \\
+0, &amp; \mathrm{else} &amp; &amp; 
+\end{cases}$$
+&lt;h3 id=&#34;权重梯度&#34;&gt;权重梯度
+&lt;/h3&gt;&lt;p&gt;根据链式法则有,
+&lt;/p&gt;
+$$\frac{\partial L}{\partial w_k}=\frac{\partial L}{\partial y_i}\frac{\partial y_i}{\partial w_k}$$
+&lt;p&gt;
+先计算雅可比项, 此处有
+&lt;/p&gt;
+$$\begin{aligned}
+\frac{\partial y_i}{\partial w_k}=C_{ijl}v_l\frac{\partial w_j}{\partial w_k}=C_{ijl}v_l\delta_{jk}=C_{ikl}v_l
+\end{aligned}$$
+&lt;p&gt;
+代回链式法则，则有
+&lt;/p&gt;
+$$
+\frac{\partial L}{\partial w_k}
+=\frac{\partial L}{\partial y_i}C_{ikl}v_l
+=\frac{\partial L}{\partial y_i}v_{i+k}
+$$
+&lt;p&gt;
+&lt;strong&gt;结论：&lt;/strong&gt; 观察权重的梯度公式可以发现, 权重的梯度等于输入数据与误差信号做互相关。也就是哪个数据点与当前的误差信号最相似，就大幅更新这个权重。&lt;/p&gt;
+&lt;h3 id=&#34;数据梯度&#34;&gt;数据梯度
+&lt;/h3&gt;&lt;p&gt;我们对第 $m$ 个输入分量 $v_m$ 求偏导。这是为了将误差继续向前传播。
+继续应用链式法则：
+&lt;/p&gt;
+$$\frac{\partial L}{\partial v_m}=\frac{\partial L}{\partial y_i}\frac{\partial y_i}{\partial v_m}$$
+&lt;p&gt;
+先计算雅可比项, 此处有
+&lt;/p&gt;
+$$\begin{aligned}
+\frac{\partial y_i}{\partial v_m}=C_{ijl}w_j\frac{\partial v_l}{\partial v_m}=C_{ijl}w_j\delta_{lm}=C_{ijm}w_j
+\end{aligned}$$
+&lt;p&gt;
+代回链式法则，则有
+&lt;/p&gt;
+$$\frac{\partial L}{\partial v_m}=\frac{\partial L}{\partial y_i}C_{ijm}w_j$$
+&lt;p&gt;
+在这个求和式中，$i$ 是哑指标，需要确定 $i$ 的值，又因为 $m=i+j$ ，所以有$i=m-j$，代回公式有
+&lt;/p&gt;
+$$
+\frac{\partial L}{\partial v_m}=\frac{\partial L}{\partial y_{m-j}}w_j
+$$
+&lt;p&gt;
+&lt;strong&gt;结论：&lt;/strong&gt; 输入的梯度等于 &lt;strong&gt;输出梯度与翻转后的权重 $w$ 的卷积（Full Convolution）&lt;/strong&gt;。这在深度学习框架中通常被称为 &lt;strong&gt;转置卷积（Transposed Convolution）&lt;/strong&gt; 或 &lt;strong&gt;反卷积（Deconvolution）&lt;/strong&gt; 的数学基础。&lt;/p&gt;
 &lt;h2 id=&#34;二维卷积&#34;&gt;二维卷积
 &lt;/h2&gt;&lt;p&gt;为简化表示，我们做如下索引替换：&lt;/p&gt;
 &lt;ul&gt;
