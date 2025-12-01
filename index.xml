@@ -15,10 +15,10 @@
         <guid>http://localhost:1313/hugo_dev/p/mainpage/</guid>
         <description>&lt;h2 id=&#34;mlpcnnattention的张量表示和梯度推导&#34;&gt;MLP、CNN、Attention的张量表示和梯度推导
 &lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://soflari.github.io/hugo_dev/p/mlp%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;MLP的张量表示及梯度推导&lt;/a&gt;
-&lt;a class=&#34;link&#34; href=&#34;https://soflari.github.io/hugo_dev/p/%E5%8D%B7%E7%A7%AF%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;CNN的张量表示及梯度推导&lt;/a&gt;
-&lt;a class=&#34;link&#34; href=&#34;https://soflari.github.io/hugo_dev/p/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MLP的张量表示及梯度推导&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://soflari.github.io/hugo_dev/p/%E5%8D%B7%E7%A7%AF%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;CNN的张量表示及梯度推导&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://soflari.github.io/hugo_dev/p/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%A8%A1%E5%9D%97%E7%9A%84%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%8F%8A%E6%A2%AF%E5%BA%A6%E6%8E%A8%E5%AF%BC/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;注意力的张量表示及梯度推导&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;机器学习笔记&#34;&gt;机器学习笔记
 &lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://soflari.github.io/hugo_dev/p/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA%E7%AC%94%E8%AE%B0/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
@@ -26,8 +26,8 @@
 &lt;h2 id=&#34;扩散模型笔记&#34;&gt;扩散模型笔记
 &lt;/h2&gt;&lt;h2 id=&#34;hugo博客相关&#34;&gt;Hugo博客相关
 &lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://soflari.github.io/hugo_dev/p/hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Hugo博客搭建&lt;/a&gt;
-&lt;a class=&#34;link&#34; href=&#34;https://soflari.github.io/hugo_dev/p/hugo%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E9%97%AE%E9%A2%98/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Hugo博客搭建&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://soflari.github.io/hugo_dev/p/hugo%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E9%97%AE%E9%A2%98/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Hugo博客的数学公式问题&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
